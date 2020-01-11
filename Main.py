@@ -1,6 +1,5 @@
-def main():
-    print("Hello World!")
-
+import Basic_Gui.Window as Window
 
 if __name__ == "__main__":
-    main()
+    print("launching Window...")
+    test = Window.Window()
