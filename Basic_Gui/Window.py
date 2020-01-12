@@ -17,8 +17,8 @@ class Window:
         global activeWindow
         activeWindow = tk.Tk()
         activeWindow.title("Intelligent Editor Environment")
-        activeWindow.minsize(width=1920, height=1080)
-        activeWindow.maxsize(width=1920, height=1080)
+        # activeWindow.minsize(width=1920, height=1080)
+        # activeWindow.maxsize(width=1920, height=1080)
 
         #set Textfield inside active Window
         global text
