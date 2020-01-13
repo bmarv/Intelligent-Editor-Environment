@@ -1,56 +1,71 @@
 from tkinter.filedialog import *
 from tkinter import messagebox
-import tkinter as tk
-import Basic_Gui.Window as win
+# import tkinter as tk
+import Basic_Gui.Window as Window
+import Main
 
-#NOT RELEVANT ANY MORE
 #TODO: use class for fileoperations instead of having one big window class
 class Fileoperations:
     def __init__(self):
-        filename = None
-        Text = win.Text
+        global filename
+        global curDir
+        global filePath
+        # pass
 
-    def newFile(self):
+    # create new File
+    def newFile(self, extText):
         global filename
         filename = "Untitled"
-        Text.delete(0.0, END)
+        extText.delete(0.0, END)
         print("new File \"Untitled\" created")
+        Main.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
+        Main.setGlobalFilename(filename)
 
     # save changes in the file
-    def saveFile(self):
-        global filename
-        t = Text.get(0.0, END)
+    def saveFile(self, extText):
+        filename = Main.getGlobalFilename()
+        self.getFilePath()
+        if(self.filename==None):
+            filename = "Untitled"
+        t = extText.get(0.0, END)
         # write into filename with 'w'
-        f = open(filename, 'w')
+        f = open(filePath, 'w')
         f.write(t)
-        print("File \"filename\" is saved")
+        print("File ", filename, " is saved", os.path.abspath(f.name))
         f.close
 
-    def saveAs(self, Text):
+    # save File in custom path
+    def saveAs(self, extText):
+        self.getFilePath()
         f = asksaveasfile(mode='w', defaultextension='.txt')
-        t = Text.get(0.0, END)
+        print("\tsaving file")
+        t = extText.get(0.0, END)
         try:
             f.write(t.rstrip())
-            print("Saving file ...")
+            global filename
+            filename = os.path.basename(f.name)
+            print("File ", filename, " saved")
+            Main.setGlobalFilename(filename)
+            Main.setGlobalPath(os.path.curdir)
         except:
             messagebox.showerror(title="Saving Error", message="Unable to save file")
-            print("Failed to save file")
+            print("Failed to save file ", f)
 
-    def openFile(self, Text):
+    # open any file
+    def openFile(self, extText):
         f = askopenfile(mode='r')
         t = f.read()
-        Text.delete(0.0, END)
-        Text.insert(0.0, t)
-        print("File opened")
+        extText.delete(0.0, END)
+        extText.insert(0.0, t)
+        filename = os.path.basename(f.name)
+        Main.setGlobalPath(os.path.curdir)
+        Main.setGlobalFilename(filename)
+        print("File ",filename," opened")
 
-
-# menubar = Menu(activeWindow)
-        # activeWindow.config(menu=menubar)
-        # filemenu = Menu(menubar)
-        # # filemenu.add_command(label="New File", command=fileOP.newFile(text))
-        # filemenu.add_command(label="Open File", command=fileOP.openFile(text))
-        # # filemenu.add_command(label="Save", command=fileOP.saveFile(text))
-        # # filemenu.add_command(label="Save As", command=fileOP.saveAs(text))
-        # filemenu.add_separator()
-        # filemenu.add_command(label="Quit", command=activeWindow.quit())
-        # menubar.add_cascade(label="File", menu=filemenu)
+    def getFilePath(self):
+        global curDir
+        curDir = Main.getGlobalPath()
+        global filename
+        filename = Main.getGlobalFilename()
+        global filePath
+        filePath = os.path.join(curDir, filename)
