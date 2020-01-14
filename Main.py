@@ -1,9 +1,10 @@
 import Basic_Gui.Window as Window
+from os import path, environ
 
 global globalFilename
-globalFilename = None
+globalFilename = "Untitled.txt"
 global globalPath
-globalPath = None
+globalPath = path.join(environ["HOMEPATH"], "Desktop")
 
 if __name__ == "__main__":
     print("launching Window...")
@@ -12,18 +13,18 @@ if __name__ == "__main__":
 def setGlobalFilename(filename):
     global globalFilename
     globalFilename=filename
-    print("new globalfilename", globalFilename)
+    print("\tnew globalfilename: ", globalFilename)
 
 def getGlobalFilename():
-    print("globalfilename",globalFilename)
+    print("\tglobalfilename: ",globalFilename)
     return globalFilename
 
 
 def setGlobalPath(path):
     global globalPath
     globalPath = path
-    print("new globalPath", globalPath)
+    print("\tnew globalPath: ", globalPath)
 
 def getGlobalPath():
-    print("globalpath",globalPath)
+    print("\tglobalpath: ",globalPath)
     return globalPath
