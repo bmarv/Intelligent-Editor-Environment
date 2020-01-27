@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter.scrolledtext import *
 import Basic_Gui.Fileoperations as Fileoperations
 from tkinter.filedialog import *
 from tkinter import messagebox
@@ -19,14 +20,9 @@ class WindowTkinter:
         global activeWindow
         activeWindow = tk.Tk()
         activeWindow.title("Intelligent Editor Environment")
-        # activeWindow.minsize(width=1920, height=1080)
+        activeWindow.geometry("800x600")
+        # activeWindow.minsize(width=800, height=600)
         # activeWindow.maxsize(width=1920, height=1080)
-
-        #set Textfield inside active Window
-        global text
-        text = tk.Text(activeWindow, width=50, height = 10)
-        text.pack()
-        global filename
 
         # get Menubar for basic actions
         menubar = tk.Menu(activeWindow)
@@ -41,6 +37,46 @@ class WindowTkinter:
 
         menubar.add_cascade(label='File', menu=fileMenu)
         activeWindow.config(menu=menubar)
+
+        # frame for text
+        textFrame = LabelFrame(activeWindow, text="Text-Input", relief='raised', width=800, height=400)
+        textFrame.pack()
+
+        #set ScrolledText-Field inside textFrame
+        global text
+        text = ScrolledText(textFrame, font='helvetica 12')
+        text.pack()
+        global filename
+
+        # frame dividing statistics
+        bottomFrame = Frame(activeWindow, width=800,height=200)
+        bottomFrame.pack()
+
+        # frame for statistics
+        statsFrame = LabelFrame(bottomFrame, text="Statistics", relief='raised',width=800, height=100)
+        statsFrame.pack()
+
+        # set button and textview for textinput
+        global calcStats
+        calcStats = Button(statsFrame, text="Calculate", width=20, height=1)
+        calcStats.pack(side=LEFT)
+        global statsText
+        statsText = Text(statsFrame,width=50, height=1)
+        statsText.insert(tk.END, "lettercount: EMPTY \t word-count: EMPTY")
+        statsText.pack(side=RIGHT)
+
+        # frame for meta information
+        metaFrame= LabelFrame(bottomFrame, text="Meta-Information", width=800, height=5)
+        metaFrame.pack()
+
+        # textview for metainformation
+        global metaText
+        metaText= Text(metaFrame, width=70, height=1)
+        metaText.insert(tk.END, "Meta-Information: EMPTY")
+        metaText.pack()
+
+
+        # mainloop
         activeWindow.mainloop()
         print("Window closed")
 
@@ -49,42 +85,3 @@ class WindowTkinter:
 
     def getActiveText(self):
         return text
-
-    # #create new File
-    # def newFile(self):
-    #     global filename
-    #     filename = "Untitled"
-    #     text.delete(0.0, END)
-    #     print("new File \"Untitled\" created")
-    #
-    # # save changes in the file
-    # def saveFile(self):
-    #     global filename
-    #     t = text.get(0.0, END)
-    #     # write into filename with 'w'
-    #     f = open(filename, 'w')
-    #     f.write(t)
-    #     print("File ",filename," is saved")
-    #     f.close
-    #
-    # # save File in custom path
-    # def saveAs(self):
-    #     f = asksaveasfile(mode='w', defaultextension='.txt')
-    #     print("\tsaving file")
-    #     t = text.get(0.0, END)
-    #     try:
-    #         f.write(t.rstrip())
-    #         global filename
-    #         filename = os.path.basename(f.name)
-    #         print("File ",filename," saved")
-    #     except:
-    #         messagebox.showerror(title="Saving Error", message="Unable to save file")
-    #         print("Failed to save file ", f)
-    #
-    # # open any file
-    # def openFile(self):
-    #     f = askopenfile(mode='r')
-    #     t = f.read()
-    #     text.delete(0.0, END)
-    #     text.insert(0.0, t)
-    #     print("File opened")
