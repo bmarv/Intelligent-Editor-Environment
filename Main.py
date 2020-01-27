@@ -1,4 +1,5 @@
-import Basic_Gui.Window as Window
+import Basic_Gui.WindowTkinter as Window
+import Basic_Gui.WindowPyQt5 as WindowQt
 from os import path, environ
 
 global globalFilename
@@ -8,7 +9,10 @@ globalPath = path.join(environ["HOMEPATH"], "Desktop")
 
 if __name__ == "__main__":
     print("launching Window...")
-    test = Window.Window()
+    test = Window.WindowTkinter()
+    # test = WindowQt.WindowPyQt5()
+
+"--- getter and setter for fileoperations"
 
 def setGlobalFilename(filename):
     global globalFilename

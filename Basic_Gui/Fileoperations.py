@@ -1,7 +1,7 @@
 from tkinter.filedialog import *
 from tkinter import messagebox
 # import tkinter as tk
-import Basic_Gui.Window as Window
+import Basic_Gui.WindowTkinter as Window
 import Main
 
 class Fileoperations:
