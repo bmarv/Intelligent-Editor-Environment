@@ -37,9 +37,10 @@ class Fileoperations:
         try:
             f.write(t.rstrip())
             self.filename = os.path.basename(f.name)
+            self.curDir = os.path.split(str(f.name))[0]
             print("File ", self.filename, " is saved in: ", os.path.abspath(f.name))
+            Main.setGlobalPath(self.curDir)
             Main.setGlobalFilename(self.filename)
-            Main.setGlobalPath(os.path.curdir)
         except:
             messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("Failed to save file ", f.name)
@@ -47,12 +48,13 @@ class Fileoperations:
     # open any file
     def openFile(self, extText):
         f = askopenfile(mode='r')
+        print("open File ",f.name)
         t = f.read()
         extText.delete(0.0, END)
         extText.insert(0.0, t)
         self.filename = os.path.basename(f.name)
-        # TODO: change curdir to directory that is currently used!
-        Main.setGlobalPath(os.path.curdir)
+        self.curDir = os.path.split(str(f.name))[0]
+        Main.setGlobalPath(self.curDir)
         Main.setGlobalFilename(self.filename)
         print("File ",self.filename," opened")
 

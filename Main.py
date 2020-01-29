@@ -6,11 +6,11 @@ from os import path, environ
 global globalFilename
 globalFilename = "Untitled.txt"
 global globalPath
-globalPath = path.join(environ["HOMEPATH"], "Desktop")
+globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
+global test
 
 if __name__ == "__main__":
     print("launching Window...")
-    global test
     test = Window.WindowTkinter()
     # test = WindowQt.WindowPyQt5()
 
@@ -34,3 +34,19 @@ def setGlobalPath(path):
 def getGlobalPath():
     print("\tglobalpath: ",globalPath)
     return globalPath
+
+def getFileSizeMessage():
+    joinedpath= path.abspath(path.join(globalPath, globalFilename))
+    print(joinedpath)
+    filesize = path.getsize(joinedpath)
+    # switch between byte, kilobyte and megabyte
+    sizemessage=""
+    if(filesize>1000000):
+        sizemessage= filesize/1000000, " Megabyte"
+    elif(filesize>=1000):
+        sizemessage = filesize/1000, " Kilobyte"
+    else:
+        sizemessage = filesize," Byte"
+    print("\tfilesize: ",sizemessage)
+    return str(sizemessage)
+
