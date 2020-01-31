@@ -1,6 +1,7 @@
 from tkinter.filedialog import *
 from tkinter import messagebox
 import Main
+from Basic_Gui import WindowTkinter as window
 
 class Fileoperations:
     def __init__(self):
@@ -22,11 +23,18 @@ class Fileoperations:
         if(self.filename==None):
             self.filename = "Untitled"
         t = extText.get(0.0, END)
-        # write into filename with 'w'
-        f = open(self.filePath, 'w')
-        f.write(t)
-        f.close
-        print("File ", self.filename, " is saved in: ", os.path.abspath(f.name))
+        # remove automatically added \n at end of file
+        t = t[:-1]
+        # check for fileintegrity
+        if(self.checkFileIntegrity(t)=='yes'):
+            # write into filename with 'w'
+            f = open(self.filePath, 'w')
+            f.write(t)
+            f.close
+            print("File ", self.filename, " is saved in: ", os.path.abspath(f.name))
+        else:
+            print("File ", self.filename, " could not be saved")
+    #         TODO: prompt file wasn't saved
 
     # save File in custom path
     def saveAs(self, extText):
@@ -62,3 +70,14 @@ class Fileoperations:
         self.curDir = Main.getGlobalPath()
         self.filename = Main.getGlobalFilename()
         self.filePath = os.path.join(self.curDir, self.filename)
+
+    def checkFileIntegrity(self, extText):
+        # get path
+        self.getFilePath()
+        # read out file content --> matches extText?
+        f= open(self.filePath, mode='r')
+        content = f.read()
+        integrPrompt = 'yes'
+        if(extText!=content):
+            integrPrompt = messagebox.askquestion('File Integrity', 'This File already exists. Do you want to override this File?', icon='warning')
+        return integrPrompt
