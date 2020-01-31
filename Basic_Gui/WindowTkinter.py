@@ -2,13 +2,14 @@ import tkinter as tk
 from tkinter.scrolledtext import *
 from tkinter.filedialog import *
 import Main
+import Basic_Gui.WindowInstance as WinInstance
 import Basic_Gui.Fileoperations as Fileoperations
 from Statistics import TextinputStatistics as Textstats
 from Statistics import FileStatistics as Filestats
 
 class WindowTkinter:
     def __init__(self):
-        global mainRef, fileOP
+        global instance, fileOP
         global activeWindow
         global metaFrame, metaRefresh, metaText, metaValue
         global statsframe, statstext, statsValue
@@ -19,6 +20,9 @@ class WindowTkinter:
         self.sentenceNumber=0
         self.linesNumber=1
         global calcStats, fileName,author,filesize
+        global fontSize, technicalFont
+        self.fontSize=12
+        self.technicalFont=0
         self.launchWindow()
 
 
@@ -32,15 +36,34 @@ class WindowTkinter:
         # get Menubar for basic actions
         menubar = tk.Menu(self.activeWindow)
 
+        # filemenu for menubar
         fileMenu = tk.Menu(menubar)
-        fileMenu.add_command(label='New File', command=lambda: self.fileOP.newFile(self.textField))
-        fileMenu.add_command(label='Open', command=lambda: self.fileOP.openFile(self.textField))
-        fileMenu.add_command(label='Save', command=lambda: self.fileOP.saveFile(self.textField))
-        fileMenu.add_command(label='Save As', command=lambda: self.fileOP.saveAs(self.textField))
+        fileMenu.add_command(label='New File', command=lambda: self.fileOP.newFile(self.textField), accelerator="Ctrl+N")
+        self.activeWindow.bind_all("<Control-n>", lambda x:self.fileOP.newFile(self.textField))
+        fileMenu.add_command(label='Open', command=lambda: self.fileOP.openFile(self.textField), accelerator="Ctrl+O")
+        self.activeWindow.bind_all("<Control-o>", lambda x:self.fileOP.openFile(self.textField))
+        fileMenu.add_command(label='Save', command=lambda: self.fileOP.saveFile(self.textField), accelerator="Ctrl+S")
+        self.activeWindow.bind_all("<Control-s>", lambda x:self.fileOP.saveFile(self.textField))
+        fileMenu.add_command(label='Save As', command=lambda: self.fileOP.saveAs(self.textField), accelerator="Ctrl+Shift+S")
+        # self.activeWindow.bind_all("<Control-Shift-s>", lambda x:self.fileOP.saveAs(self.textField))
         fileMenu.add_separator()
-        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField))
+        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl_X")
+        self.activeWindow.bind_all("<Control-x>", lambda x:self.exitActivity(self.activeWindow, self.textField))
 
         menubar.add_cascade(label='File', menu=fileMenu)
+
+        # Edit actions for menubar
+        editMenu = tk.Menu(menubar)
+        editMenu.add_command(label='Undo', command=lambda: self.textField.edit_undo(), accelerator="Ctrl+Z")
+        editMenu.add_command(label='Redo', command=lambda: self.textField.edit_redo(), accelerator="Ctrl+Y")
+        editMenu.add_separator()
+        editMenu.add_command(label='Increase Text-Size', command=lambda: self.increaseTextSize(), accelerator="Ctrl++")
+        # self.activeWindow.bind_all("<Control-\+>", lambda x: self.increaseTextSize())
+        editMenu.add_command(label='Decrease Text-Size', command=lambda: self.decreaseTextSize(), accelerator="Ctrl+-")
+        # self.activeWindow.bind_all("<Control-\->", lambda x: self.decreaseTextSize())
+        editMenu.add_command(label='Change Font', command=lambda: self.changeFont())
+        menubar.add_cascade(label='Edit', menu=editMenu)
+
         self.activeWindow.config(menu=menubar)
 
         # frame for meta information
@@ -64,7 +87,7 @@ class WindowTkinter:
         self.textFrame.pack()
 
         #set ScrolledText-Field inside textFrame
-        self.textField = ScrolledText(self.textFrame, font='helvetica 12')
+        self.textField = ScrolledText(self.textFrame, font=('helvetica',12), undo=TRUE)
         self.textField.pack()
 
         # frame for statistics
@@ -118,15 +141,15 @@ class WindowTkinter:
     def calculateFileStats(self, metaText, textField):
         # save File
         self.fileOP.saveFile(textField)
-        self.mainRef = Main
+        self.instance = WinInstance.WindowInstance()
         # filename and author
         stats = Filestats.FileStatistics()
-        self.fileName= self.mainRef.getGlobalFilename()
+        self.fileName= self.instance.getGlobalFilename()
         self.author = stats.getAuthor()
         # filesize
-        filesizemessage = re.sub("[{}(),'']","",self.mainRef.getFileSizeMessage())
+        filesizemessage = re.sub("[{}(),'']","",self.instance.getFileSizeMessage())
         # write out stats
-        self.metaValue = "Author:", self.author, "\tFilename: ", self.fileName, "\tFilesize: ", filesizemessage
+        self.metaValue = "Filename: ", self.fileName, "\tFilesize: ", filesizemessage,"\tAuthor:", self.author
         self.metaText.config(state=tk.NORMAL)
         self.metaText.delete(1.0, tk.END)
         self.metaText.insert(tk.END, self.metaValue)
@@ -138,5 +161,30 @@ class WindowTkinter:
         savePrompt = tk.messagebox.askquestion('Exit Application', 'Do you want to save the Document?', icon='warning')
         if(savePrompt=='yes'):
             Fileoperations.Fileoperations().saveFile(self.textField)
+            print("File saved on exit-activity")
+        else:
+            print("File not saved on exit-activity")
         self.activeWindow.quit()
         print("activeWindow closed!")
+
+
+    def increaseTextSize(self):
+        self.fontSize+=1
+        self.textField.configure(font=('helvetica', self.fontSize))
+        self.textField.pack()
+
+    def decreaseTextSize(self):
+        self.fontSize-=1
+        self.textField.configure(font=('helvetica', self.fontSize))
+        self.textField.pack()
+
+    def changeFont(self):
+        if(self.technicalFont==0):
+            self.technicalFont=1
+            self.fontSize+=1
+            self.textField.configure(font=('Times', self.fontSize))
+        else:
+            self.technicalFont=0
+            self.fontSize-=1
+            self.textField.configure(font=('helvetica', self.fontSize))
+        self.textField.pack()

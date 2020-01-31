@@ -1,6 +1,7 @@
 from tkinter.filedialog import *
 from tkinter import messagebox
 import Main
+from Basic_Gui import WindowInstance as WinInstance
 from Basic_Gui import WindowTkinter as window
 
 class Fileoperations:
@@ -8,14 +9,18 @@ class Fileoperations:
         global filename
         global curDir
         global filePath
+        global instance
+        instance= WinInstance.WindowInstance()
 
     # create new File
     def newFile(self, extText):
         self.filename = "Untitled.txt"
         extText.delete(0.0, END)
+        # newInstance = Main.WinInstance.WindowInstance()
+        # newInstance.newInstance()
+        instance.setGlobalFilename(self.filename)
+        instance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
         print("new File ", self.filename," in use")
-        Main.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
-        Main.setGlobalFilename(self.filename)
 
     # save changes in the file
     def saveFile(self, extText):
@@ -47,8 +52,8 @@ class Fileoperations:
             self.filename = os.path.basename(f.name)
             self.curDir = os.path.split(str(f.name))[0]
             print("File ", self.filename, " is saved in: ", os.path.abspath(f.name))
-            Main.setGlobalPath(self.curDir)
-            Main.setGlobalFilename(self.filename)
+            instance.setGlobalPath(self.curDir)
+            instance.setGlobalFilename(self.filename)
         except:
             messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("Failed to save file ", f.name)
@@ -62,22 +67,25 @@ class Fileoperations:
         extText.insert(0.0, t)
         self.filename = os.path.basename(f.name)
         self.curDir = os.path.split(str(f.name))[0]
-        Main.setGlobalPath(self.curDir)
-        Main.setGlobalFilename(self.filename)
+        instance.setGlobalPath(self.curDir)
+        instance.setGlobalFilename(self.filename)
         print("File ",self.filename," opened")
 
     def getFilePath(self):
-        self.curDir = Main.getGlobalPath()
-        self.filename = Main.getGlobalFilename()
+        self.curDir = instance.getGlobalPath()
+        self.filename = instance.getGlobalFilename()
         self.filePath = os.path.join(self.curDir, self.filename)
 
     def checkFileIntegrity(self, extText):
         # get path
         self.getFilePath()
         # read out file content --> matches extText?
-        f= open(self.filePath, mode='r')
-        content = f.read()
         integrPrompt = 'yes'
-        if(extText!=content):
-            integrPrompt = messagebox.askquestion('File Integrity', 'This File already exists. Do you want to override this File?', icon='warning')
+        if(os.path.isfile(self.filePath)):
+            f= open(self.filePath, mode='r')
+            content = f.read()
+            if(extText!=content):
+                integrPrompt = messagebox.askquestion('File Integrity', 'This File already exists. Do you want to overwrite this File?', icon='warning')
+                if(integrPrompt=='yes'):
+                    print("file ", self.filename," was overwritten")
         return integrPrompt
