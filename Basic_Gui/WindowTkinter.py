@@ -45,7 +45,7 @@ class WindowTkinter:
         fileMenu.add_command(label='Save', command=lambda: self.fileOP.saveFile(self.textField), accelerator="Ctrl+S")
         self.activeWindow.bind_all("<Control-s>", lambda x:self.fileOP.saveFile(self.textField))
         fileMenu.add_command(label='Save As', command=lambda: self.fileOP.saveAs(self.textField), accelerator="Ctrl+Shift+S")
-        # self.activeWindow.bind_all("<Control-Shift-s>", lambda x:self.fileOP.saveAs(self.textField))
+        self.activeWindow.bind_all("<Control-S>", lambda x:self.fileOP.saveAs(self.textField))
         fileMenu.add_separator()
         fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl_X")
         self.activeWindow.bind_all("<Control-x>", lambda x:self.exitActivity(self.activeWindow, self.textField))
@@ -58,9 +58,9 @@ class WindowTkinter:
         editMenu.add_command(label='Redo', command=lambda: self.textField.edit_redo(), accelerator="Ctrl+Y")
         editMenu.add_separator()
         editMenu.add_command(label='Increase Text-Size', command=lambda: self.increaseTextSize(), accelerator="Ctrl++")
-        # self.activeWindow.bind_all("<Control-\+>", lambda x: self.increaseTextSize())
+        self.activeWindow.bind_all("<Control-plus>", lambda x: self.increaseTextSize())
         editMenu.add_command(label='Decrease Text-Size', command=lambda: self.decreaseTextSize(), accelerator="Ctrl+-")
-        # self.activeWindow.bind_all("<Control-\->", lambda x: self.decreaseTextSize())
+        self.activeWindow.bind_all("<Control-minus>", lambda x: self.decreaseTextSize())
         editMenu.add_command(label='Change Font', command=lambda: self.changeFont())
         menubar.add_cascade(label='Edit', menu=editMenu)
 
@@ -73,8 +73,9 @@ class WindowTkinter:
         # button and textview for metainformation
         self.metaRefresh = Button(self.metaFrame,  text="Save & Refresh", width=12, height=1, command= lambda: self.calculateFileStats(self.metaText, self.textField))
         self.metaRefresh.pack(side=LEFT)
+        self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
         self.metaText = Text(self.metaFrame, width=70, height=1)
-        self.metaValue = "please click refresh"
+        self.metaValue = "please refresh to load"
         self.metaText.config(state=tk.NORMAL)
         self.metaText.delete(1.0, tk.END)
         self.metaText.insert(tk.END, self.metaValue)
@@ -95,9 +96,10 @@ class WindowTkinter:
         self.statsFrame.pack()
 
         # button and textview for textinput
-        self.calcStats = Button(self.statsFrame, text="Calculate", width=12, height=1, command= lambda: self.calculateStats(self.textField))
         # invoke statistics
+        self.calcStats = Button(self.statsFrame, text="Calculate", width=12, height=1, command= lambda: self.calculateStats(self.textField))
         self.calcStats.pack(side=LEFT)
+        self.activeWindow.bind_all("<Control-C>", lambda x: self.calculateStats(self.textField))
         self.statsValue = "Letters: ", self.letterNumber, "\t Words: ", self.wordNumber,"\t Sentences: ", self.sentenceNumber,"\t Lines: ",self.linesNumber
         self.statsText = Text(self.statsFrame, width=70, height=1)
         self.statsText.config(state=tk.NORMAL)

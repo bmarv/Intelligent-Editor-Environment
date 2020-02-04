@@ -2,7 +2,6 @@ from tkinter.filedialog import *
 from tkinter import messagebox
 import Main
 from Basic_Gui import WindowInstance as WinInstance
-from Basic_Gui import WindowTkinter as window
 
 class Fileoperations:
     def __init__(self):

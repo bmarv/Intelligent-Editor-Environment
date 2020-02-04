@@ -11,8 +11,7 @@ class WindowInstance:
         print("launching Window...")
 
     def newInstance(self):
-        test = Window.WindowTkinter()
-        # print("new Instance ", test)
+        WindowInst = Window.WindowTkinter()
 
     "--- getter and setter for fileoperations"
     def setGlobalFilename(self, filename):
