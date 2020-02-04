@@ -1,3 +1,5 @@
+"author: Marvin Beese"
+
 import Basic_Gui.WindowTkinter as Window
 import Basic_Gui.WindowPyQt5 as WindowQt
 from os import path, environ

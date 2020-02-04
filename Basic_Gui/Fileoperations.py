@@ -1,3 +1,5 @@
+"author: Marvin Beese"
+
 from tkinter.filedialog import *
 from tkinter import messagebox
 import Main

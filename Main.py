@@ -1,3 +1,5 @@
+"author: Marvin Beese"
+
 from Basic_Gui import WindowInstance as WinInstance
 
 global instance

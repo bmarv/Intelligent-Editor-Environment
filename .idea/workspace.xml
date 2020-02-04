@@ -3,7 +3,23 @@
   <component name="ChangeListManager">
     <list default="true" id="e0710cbd-5cf9-4c5d-be72-caa7788b187c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basic_Gui/Fileoperations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/Fileoperations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basic_Gui/WindowInstance.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/WindowInstance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Basic_Gui/WindowPyQt5.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/WindowPyQt5.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basic_Gui/WindowTkinter.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/WindowTkinter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/Analysis-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/EXE-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/PKG-00.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/PKG-00.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/PKG-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/PYZ-00.pyz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/PYZ-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/Tree-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/Tree-00.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/Tree-01.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/Tree-01.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Main/xref-Main.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/Main/xref-Main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/IEE_0.1.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/Main.exe" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,7 +263,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Basic_Gui/WindowPyQt5.py</url>
-          <line>48</line>
+          <line>50</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

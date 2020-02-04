@@ -1,3 +1,5 @@
+"author: Marvin Beese"
+
 import tkinter as tk
 from tkinter.scrolledtext import *
 from tkinter.filedialog import *
