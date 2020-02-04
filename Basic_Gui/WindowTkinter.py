@@ -10,6 +10,7 @@ from Statistics import FileStatistics as Filestats
 class WindowTkinter:
     def __init__(self):
         global instance, fileOP
+        self.instance = WinInstance.WindowInstance()
         global activeWindow
         global metaFrame, metaRefresh, metaText, metaValue
         global statsframe, statstext, statsValue
@@ -74,7 +75,7 @@ class WindowTkinter:
         self.metaRefresh = Button(self.metaFrame,  text="Save & Refresh", width=12, height=1, command= lambda: self.calculateFileStats(self.metaText, self.textField))
         self.metaRefresh.pack(side=LEFT)
         self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
-        self.metaText = Text(self.metaFrame, width=70, height=1)
+        self.metaText = Text(self.metaFrame, width=100, height=1)
         self.metaValue = "please refresh to load"
         self.metaText.config(state=tk.NORMAL)
         self.metaText.delete(1.0, tk.END)
@@ -84,7 +85,7 @@ class WindowTkinter:
 
 
         # frame for text
-        self.textFrame = LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
+        self.textFrame = LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=1000, height=400)
         self.textFrame.pack()
 
         #set ScrolledText-Field inside textFrame
@@ -101,7 +102,7 @@ class WindowTkinter:
         self.calcStats.pack(side=LEFT)
         self.activeWindow.bind_all("<Control-C>", lambda x: self.calculateStats(self.textField))
         self.statsValue = "Letters: ", self.letterNumber, "\t Words: ", self.wordNumber,"\t Sentences: ", self.sentenceNumber,"\t Lines: ",self.linesNumber
-        self.statsText = Text(self.statsFrame, width=70, height=1)
+        self.statsText = Text(self.statsFrame, width=100, height=1)
         self.statsText.config(state=tk.NORMAL)
         self.statsText.delete(1.0, tk.END)
         self.statsText.insert(tk.END, self.statsValue)
@@ -144,7 +145,6 @@ class WindowTkinter:
         # save File
         self.fileOP.saveFile(textField)
         # filename and author
-        self.instance = WinInstance.WindowInstance()
         stats = Filestats.FileStatistics()
         self.fileName= self.instance.getGlobalFilename()
         self.author = stats.getAuthor()
@@ -159,13 +159,26 @@ class WindowTkinter:
         self.metaText.pack()
 
     def exitActivity(self, activeWindow, textField):
-        # ask whether it should be saved
-        savePrompt = tk.messagebox.askquestion('Exit Application', 'Do you want to save the Document?', icon='warning')
-        if(savePrompt=='yes'):
-            Fileoperations.Fileoperations().saveFile(self.textField)
-            print("File saved on exit-activity")
-        else:
-            print("File not saved on exit-activity")
+        # check file-integrity
+        filePath = os.path.join(self.instance.getGlobalPath(), self.instance.getGlobalFilename())
+        if (os.path.isfile(filePath)):
+            f = open(filePath, mode='r')
+            content = f.read()
+            # remove \n of last empty save
+            if(content=="\n"):
+                content = content[:-1]
+            text = str(textField.get(0.0,END))
+            # remove added \n
+            if(text=="\n"):
+                text = text[:-1]
+            # ask whether it should be saved
+            if (text != content):
+                savePrompt = tk.messagebox.askquestion('Exit Application', 'Do you want to save the Document?', icon='warning')
+                if(savePrompt=='yes'):
+                    self.fileOP.saveFile(self.textField)
+                    print("File saved on exit-activity")
+                else:
+                    print("File not saved on exit-activity")
         self.activeWindow.quit()
         print("activeWindow closed!")
 

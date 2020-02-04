@@ -31,7 +31,8 @@ class Fileoperations:
             self.filename = "Untitled"
         t = extText.get(0.0, END)
         # remove automatically added \n at end of file
-        t = t[:-1]
+        if(t=="\n"):
+            t = t[:-1]
         # check for fileintegrity
         if(self.checkFileIntegrity(t)=='yes'):
             # write into filename with 'w'
@@ -40,8 +41,8 @@ class Fileoperations:
             f.close
             print("File ", self.filename, " is saved in: ", os.path.abspath(f.name))
         else:
+            messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("File ", self.filename, " could not be saved")
-    #         TODO: prompt file wasn't saved
 
     # save File in custom path
     def saveAs(self, extText):
@@ -64,7 +65,7 @@ class Fileoperations:
     def openFile(self, extText):
         f = askopenfile(mode='r')
         print("open File ",f.name)
-        t = f.read()
+        t = str(f.read())[:-1]
         extText.delete(0.0, END)
         extText.insert(0.0, t)
         self.filename = os.path.basename(f.name)
@@ -86,7 +87,7 @@ class Fileoperations:
         if(os.path.isfile(self.filePath)):
             f= open(self.filePath, mode='r')
             content = f.read()
-            if(extText!=content):
+            if(str(extText)!=content):
                 integrPrompt = messagebox.askquestion('File Integrity', 'This File already exists. Do you want to overwrite this File?', icon='warning')
                 if(integrPrompt=='yes'):
                     print("file ", self.filename," was overwritten")
