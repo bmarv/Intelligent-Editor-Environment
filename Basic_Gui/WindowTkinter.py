@@ -85,11 +85,11 @@ class WindowTkinter:
 
 
         # frame for text
-        self.textFrame = LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=1000, height=400)
+        self.textFrame = LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
         self.textFrame.pack()
 
         #set ScrolledText-Field inside textFrame
-        self.textField = ScrolledText(self.textFrame, font=('helvetica',12), undo=TRUE)
+        self.textField = ScrolledText(self.textFrame, font=('helvetica',12), undo=TRUE, width=100)
         self.textField.pack()
 
         # frame for statistics
