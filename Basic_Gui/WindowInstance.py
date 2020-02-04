@@ -2,16 +2,20 @@ import Basic_Gui.WindowTkinter as Window
 import Basic_Gui.WindowPyQt5 as WindowQt
 from os import path, environ
 class WindowInstance:
+
+    global globalFilename
+    globalFilename = "Untitled.txt"
+    global globalPath
+    globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
+    global test
+    print("launching Window...")
+
     def __init__(self):
-        global globalFilename
-        globalFilename = "Untitled.txt"
-        global globalPath
-        globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
-        global test
-        print("launching Window...")
+        pass
 
     def newInstance(self):
-        WindowInst = Window.WindowTkinter()
+        test = Window.WindowTkinter()
+        # print("new Instance ", test)
 
     "--- getter and setter for fileoperations"
     def setGlobalFilename(self, filename):

@@ -2,6 +2,7 @@ from tkinter.filedialog import *
 from tkinter import messagebox
 import Main
 from Basic_Gui import WindowInstance as WinInstance
+from Basic_Gui import WindowTkinter as window
 
 class Fileoperations:
     def __init__(self):
@@ -14,9 +15,11 @@ class Fileoperations:
     # create new File
     def newFile(self, extText):
         self.filename = "Untitled.txt"
-        extText.delete(0.0, END)
-        # newInstance = Main.WinInstance.WindowInstance()
+        # newInstance = Main.instance2
         # newInstance.newInstance()
+        # newInstance.setGlobalFilename(self.filename)
+        # newInstance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
+        extText.delete(0.0, END)
         instance.setGlobalFilename(self.filename)
         instance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
         print("new File ", self.filename," in use")

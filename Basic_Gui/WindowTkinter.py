@@ -47,7 +47,7 @@ class WindowTkinter:
         fileMenu.add_command(label='Save As', command=lambda: self.fileOP.saveAs(self.textField), accelerator="Ctrl+Shift+S")
         self.activeWindow.bind_all("<Control-S>", lambda x:self.fileOP.saveAs(self.textField))
         fileMenu.add_separator()
-        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl_X")
+        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl+X")
         self.activeWindow.bind_all("<Control-x>", lambda x:self.exitActivity(self.activeWindow, self.textField))
 
         menubar.add_cascade(label='File', menu=fileMenu)
@@ -143,8 +143,8 @@ class WindowTkinter:
     def calculateFileStats(self, metaText, textField):
         # save File
         self.fileOP.saveFile(textField)
-        self.instance = WinInstance.WindowInstance()
         # filename and author
+        self.instance = WinInstance.WindowInstance()
         stats = Filestats.FileStatistics()
         self.fileName= self.instance.getGlobalFilename()
         self.author = stats.getAuthor()
