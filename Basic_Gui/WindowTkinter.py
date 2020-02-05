@@ -3,6 +3,8 @@
 import tkinter as tk
 from tkinter.scrolledtext import *
 from tkinter.filedialog import *
+from tkinter import ttk
+from ttkthemes import ThemedTk
 import Main
 import Basic_Gui.WindowInstance as WinInstance
 import Basic_Gui.Fileoperations as Fileoperations
@@ -11,6 +13,7 @@ from Statistics import FileStatistics as Filestats
 
 class WindowTkinter:
     def __init__(self):
+        global stylettk
         global instance, fileOP
         self.instance = WinInstance.WindowInstance()
         global activeWindow
@@ -32,9 +35,10 @@ class WindowTkinter:
     def launchWindow(self):
         print("Window launched: Tkinter")
         self.fileOP = Fileoperations.Fileoperations()
-        self.activeWindow = tk.Tk()
+        self.activeWindow = ThemedTk(theme='radiance')
         self.activeWindow.title("Intelligent Editor Environment")
         self.activeWindow.geometry("800x600")
+        self.stylettk = ttk.Style()
 
         # get Menubar for basic actions
         menubar = tk.Menu(self.activeWindow)
@@ -67,14 +71,22 @@ class WindowTkinter:
         editMenu.add_command(label='Change Font', command=lambda: self.changeFont())
         menubar.add_cascade(label='Edit', menu=editMenu)
 
+
+        # Analysis Actions for menubar
+        analysisMenu = tk.Menu(menubar)
+        analysisMenu.add_command(label='Analysis for Text-Input')
+        analysisMenu.add_command(label='Analysis for File')
+        menubar.add_cascade(label='Analysis', menu=analysisMenu)
+
         self.activeWindow.config(menu=menubar)
 
         # frame for meta information
-        self.metaFrame = LabelFrame(self.activeWindow, text="Document-Information", width=800, height=5)
+        self.metaFrame = ttk.LabelFrame(self.activeWindow, text="Document-Information",width=800, height=5)
         self.metaFrame.pack()
 
         # button and textview for metainformation
-        self.metaRefresh = Button(self.metaFrame,  text="Save & Refresh", width=12, height=1, command= lambda: self.calculateFileStats(self.metaText, self.textField))
+        self.stylettk.configure('my.TButton', font=('Helvetica', 8))
+        self.metaRefresh = ttk.Button(self.metaFrame,  text="Save & Refresh", width=13, command= lambda: self.calculateFileStats(self.metaText, self.textField), style='my.TButton')
         self.metaRefresh.pack(side=LEFT)
         self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
         self.metaText = Text(self.metaFrame, width=100, height=1)
@@ -87,7 +99,7 @@ class WindowTkinter:
 
 
         # frame for text
-        self.textFrame = LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
+        self.textFrame = ttk.LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
         self.textFrame.pack()
 
         #set ScrolledText-Field inside textFrame
@@ -95,12 +107,12 @@ class WindowTkinter:
         self.textField.pack()
 
         # frame for statistics
-        self.statsFrame = LabelFrame(self.activeWindow, text="Statistics", width=800, height=100)
+        self.statsFrame = ttk.LabelFrame(self.activeWindow, text="Statistics", width=800, height=100)
         self.statsFrame.pack()
 
         # button and textview for textinput
         # invoke statistics
-        self.calcStats = Button(self.statsFrame, text="Calculate", width=12, height=1, command= lambda: self.calculateStats(self.textField))
+        self.calcStats = ttk.Button(self.statsFrame, text="Calculate", width=13, command= lambda: self.calculateStats(self.textField), style='my.TButton')
         self.calcStats.pack(side=LEFT)
         self.activeWindow.bind_all("<Control-C>", lambda x: self.calculateStats(self.textField))
         self.statsValue = "Letters: ", self.letterNumber, "\t Words: ", self.wordNumber,"\t Sentences: ", self.sentenceNumber,"\t Lines: ",self.linesNumber
