@@ -7,8 +7,6 @@ from ttkthemes import ThemedTk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
-import matplotlib as mlp
-import matplotlib.pyplot as plt
 
 class AnalysisFrame():
     def __init__(self, file):
@@ -85,7 +83,7 @@ class AnalysisFrame():
         totalWordsFrame=ttk.Frame(self.wordFrame)
         totalWordsFrame.pack(side=TOP, fill=BOTH)
 
-        self.totalWordsLabel=ttk.Label(totalWordsFrame, text='Total Word Number:   0')
+        self.totalWordsLabel=ttk.Label(totalWordsFrame, text='Total Word Number (Duplicates resolved): 0')
         self.totalWordsLabel.pack(side=TOP, anchor=W, fill="y")
         self.updateTable()  #update table and full count on startup
 
@@ -130,7 +128,7 @@ class AnalysisFrame():
         self.listNodes.pack(side="left", fill="y")
         self.scrollbar.configure(command=self.listNodes.yview)
         # fill label with total number of words
-        totalWordsNr="Total Word Number:   ",self.n
+        totalWordsNr="Total Word Number without Duplicates:",self.n
         self.totalWordsLabel.config(text=totalWordsNr)
         self.totalWordsLabel.pack(side=TOP, anchor=W, fill="y")
 
