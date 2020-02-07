@@ -5,7 +5,7 @@ from tkinter.filedialog import *
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
 import matplotlib as mlp
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ class AnalysisFrame():
         self.currFile=file
         self.fileAna = FileAnalysis.FileAnalysis()
         global anaFrame, stylettk
-        global plotterFrame, refreshPlotButton, plot, plot, a, canvas, b
+        global plotterFrame, refreshPlotButton, plot, plot, a, canvas, b, graph, fig
         global checkFrame, textFrame, graphCheck, gradientCheck, exponentCheck, graphVar, gradientVar, expVar, textGraph, textGradient, textExp
         global tableFrame, refreshTableButton, listNodes, scrollbar, wordFrame, queryFrame, queryResult, queryResultText, totalWordsLabel
         global n, W, sortedW
@@ -63,7 +63,6 @@ class AnalysisFrame():
         self.fig = Figure(figsize=(4, 4))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.plotterFrame)
         self.buildPlot(50)
-        # self.calcGradient(50)
 
         #  Table with word statistics
         self.wordFrame = ttk.Frame(self.anaFrame, width=10)
@@ -172,11 +171,12 @@ class AnalysisFrame():
             word= np.append(word, k)
         return x,y,word
 
+
     def buildPlot(self, max):
 
         self.plotterFrame.destroy()
         self.buildPlotterFrameTop()
-        self.fig = Figure(figsize=(4, 4))
+        self.fig = Figure(figsize=(4, 4), dpi=100)
         self.a = self.fig.add_subplot(111)
         x, y, word = self.calcPlot(max)
         self.a.scatter(x, y, color='red')
@@ -190,8 +190,16 @@ class AnalysisFrame():
         self.a.grid(True)
         self.a.set_xscale('log')
         self.a.set_yscale('log')
+
+        self.calculateSlope(x,y)
+
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.plotterFrame)
-        self.canvas.get_tk_widget().pack()
+        self.canvas.get_tk_widget().pack(expand=True)
+        # navigation bar
+        toolbar= NavigationToolbar2Tk(self.canvas, self.plotterFrame)
+        toolbar.update()
+        self.canvas.draw()
+        # self.graph.pop(0).remove()
         self.canvas.draw()
         self.buildPlotterFrameBottom()
 
@@ -228,10 +236,10 @@ class AnalysisFrame():
         self.textExp = Text(self.textFrame, width=20, height=1)
         self.textExp.pack(side=TOP)
 
-    def calcGradient(self, max):
-        x, y, word = self.calcPlot(max)
-        x1,y1= x[0],y[0]
-        x2,y2=x[-1:],y[-1:]
-        self.b = self.fig.add_subplot(111)
-        self.b.plot(x1, y1, x2, y2, color='b')
-        self.canvas.draw()
+    def calculateSlope(self, x, y):
+        a = [x[0], x[-1:]]
+        b = [y[0], y[-1:]]
+        self.graph = self.a.plot(a, b)
+        m = (y[0] - y[-1:]) / (x[0] - x[-1:])
+
+        return m
