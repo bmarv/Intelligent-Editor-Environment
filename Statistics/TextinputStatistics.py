@@ -19,7 +19,7 @@ class TextinputStatistics:
     def countWords(self, extText):
         # split string for blank spaces
         splittedBlankspace = str(extText).split()
-        # include only alpha-elements in array
+        # include only alphabetic-elements in array
         splittedWords = []
         for el in splittedBlankspace:
             if(re.match("\w",el)):

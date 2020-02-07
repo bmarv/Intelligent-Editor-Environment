@@ -8,8 +8,9 @@ from ttkthemes import ThemedTk
 import Main
 import Basic_Gui.WindowInstance as WinInstance
 import Basic_Gui.Fileoperations as Fileoperations
+import Basic_Gui.AnalysisFrame as AnaFrame
 from Statistics import TextinputStatistics as Textstats
-from Statistics import FileStatistics as Filestats
+from Statistics import FileAnalysis as FileAna
 
 class WindowTkinter:
     def __init__(self):
@@ -26,7 +27,7 @@ class WindowTkinter:
         self.sentenceNumber=0
         self.linesNumber=1
         global calcStats, fileName,author,filesize
-        global fontSize, technicalFont
+        global fontSize, technicalFont, text
         self.fontSize=12
         self.technicalFont=0
         self.launchWindow()
@@ -47,12 +48,12 @@ class WindowTkinter:
         fileMenu = tk.Menu(menubar)
         fileMenu.add_command(label='New File', command=lambda: self.fileOP.newFile(self.textField), accelerator="Ctrl+N")
         self.activeWindow.bind_all("<Control-n>", lambda x:self.fileOP.newFile(self.textField))
-        fileMenu.add_command(label='Open', command=lambda: self.fileOP.openFile(self.textField), accelerator="Ctrl+O")
-        self.activeWindow.bind_all("<Control-o>", lambda x:self.fileOP.openFile(self.textField))
-        fileMenu.add_command(label='Save', command=lambda: self.fileOP.saveFile(self.textField), accelerator="Ctrl+S")
-        self.activeWindow.bind_all("<Control-s>", lambda x:self.fileOP.saveFile(self.textField))
-        fileMenu.add_command(label='Save As', command=lambda: self.fileOP.saveAs(self.textField), accelerator="Ctrl+Shift+S")
-        self.activeWindow.bind_all("<Control-S>", lambda x:self.fileOP.saveAs(self.textField))
+        fileMenu.add_command(label='Open', command=lambda: self.openFileActivity(), accelerator="Ctrl+O")
+        self.activeWindow.bind_all("<Control-o>", lambda x:self.openFileActivity())
+        fileMenu.add_command(label='Save', command=lambda: self.saveActivity(), accelerator="Ctrl+S")
+        self.activeWindow.bind_all("<Control-s>", lambda x: self.saveActivity())
+        fileMenu.add_command(label='Save As', command=lambda: self.saveAsActivity(), accelerator="Ctrl+Shift+S")
+        self.activeWindow.bind_all("<Control-S>", lambda x:self.saveAsActivity())
         fileMenu.add_separator()
         fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl+X")
         self.activeWindow.bind_all("<Control-x>", lambda x:self.exitActivity(self.activeWindow, self.textField))
@@ -68,14 +69,17 @@ class WindowTkinter:
         self.activeWindow.bind_all("<Control-plus>", lambda x: self.increaseTextSize())
         editMenu.add_command(label='Decrease Text-Size', command=lambda: self.decreaseTextSize(), accelerator="Ctrl+-")
         self.activeWindow.bind_all("<Control-minus>", lambda x: self.decreaseTextSize())
-        editMenu.add_command(label='Change Font', command=lambda: self.changeFont())
+        editMenu.add_command(label='Change Font', command=lambda: self.changeFont(), accelerator="Alt+F")
+        self.activeWindow.bind_all("<Alt-f>", lambda x: self.changeFont())
         menubar.add_cascade(label='Edit', menu=editMenu)
 
 
         # Analysis Actions for menubar
         analysisMenu = tk.Menu(menubar)
-        analysisMenu.add_command(label='Analysis for Text-Input')
-        analysisMenu.add_command(label='Analysis for File')
+        analysisMenu.add_command(label='Analysis for Text-Input', command=lambda: self.analysisTextBox(), accelerator="Ctrl-Shift-A")
+        self.activeWindow.bind_all("<Control-A>", lambda x: self.analysisTextBox())
+        analysisMenu.add_command(label='Analysis for File', command=lambda: self.analysisSeparateFile(), accelerator="Ctrl-Shift-F")
+        self.activeWindow.bind_all("<Control-F>", lambda x: self.analysisSeparateFile())
         menubar.add_cascade(label='Analysis', menu=analysisMenu)
 
         self.activeWindow.config(menu=menubar)
@@ -88,7 +92,7 @@ class WindowTkinter:
         self.stylettk.configure('my.TButton', font=('Helvetica', 8))
         self.metaRefresh = ttk.Button(self.metaFrame,  text="Save & Refresh", width=13, command= lambda: self.calculateFileStats(self.metaText, self.textField), style='my.TButton')
         self.metaRefresh.pack(side=LEFT)
-        self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
+        # self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
         self.metaText = Text(self.metaFrame, width=100, height=1)
         self.metaValue = "please refresh to load"
         self.metaText.config(state=tk.NORMAL)
@@ -137,7 +141,6 @@ class WindowTkinter:
         return text
 
     def calculateStats(self, textField):
-        global text
         text = textField.get(1.0, tk.END)
         # count letters
         self.letterNumber = Textstats.TextinputStatistics().countLetters(text)
@@ -159,7 +162,7 @@ class WindowTkinter:
         # save File
         self.fileOP.saveFile(textField)
         # filename and author
-        stats = Filestats.FileStatistics()
+        stats = FileAna.FileAnalysis()
         self.fileName= self.instance.getGlobalFilename()
         self.author = stats.getAuthor()
         # filesize
@@ -193,7 +196,7 @@ class WindowTkinter:
                     print("File saved on exit-activity")
                 else:
                     print("File not saved on exit-activity")
-        self.activeWindow.quit()
+        self.activeWindow.destroy()
         print("activeWindow closed!")
 
 
@@ -217,3 +220,31 @@ class WindowTkinter:
             self.fontSize-=1
             self.textField.configure(font=('helvetica', self.fontSize))
         self.textField.pack()
+
+    def analysisTextBox(self):
+        self.fileOP.saveFile(self.textField)
+        currPath=os.path.join(self.instance.getGlobalPath(), self.instance.getGlobalFilename())
+        print("open ", currPath,"for File Analyses")
+        fileAna=AnaFrame.AnalysisFrame(currPath)
+        fileAna.launchAnalysis()
+
+    def analysisSeparateFile(self):
+        f = askopenfile(mode='r', title="Select File for File-Analysis", filetypes=[("Text Files", '*.txt')])
+        print("open ", f.name, "for File Analysis")
+        fileAna = AnaFrame.AnalysisFrame(f.name)
+        fileAna.launchAnalysis()
+
+    def openFileActivity(self):
+        self.fileOP.openFile(self.textField)
+        self.calculateFileStats(self.metaText, self.textField)
+        self.calculateStats(self.textField)
+
+    def saveActivity(self):
+        self.fileOP.saveFile(self.textField)
+        self.calculateFileStats(self.metaText, self.textField)
+        self.calculateStats(self.textField)
+
+    def saveAsActivity(self):
+        self.fileOP.saveAs(self.textField)
+        self.calculateFileStats(self.metaText, self.textField)
+        self.calculateStats(self.textField)

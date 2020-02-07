@@ -65,7 +65,7 @@ class Fileoperations:
 
     # open any file
     def openFile(self, extText):
-        f = askopenfile(mode='r')
+        f = askopenfile(mode='r', title="Select File to open")
         print("open File ",f.name)
         t = str(f.read())[:-1]
         extText.delete(0.0, END)
