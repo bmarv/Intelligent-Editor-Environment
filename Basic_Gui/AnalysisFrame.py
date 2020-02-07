@@ -16,10 +16,13 @@ class AnalysisFrame():
         self.currFile=file
         self.fileAna = FileAnalysis.FileAnalysis()
         global anaFrame, stylettk
-        global plotterFrame, refreshPlotButton, plot, plot, a, canvas, b, graph, fig
+        global plotterFrame, refreshPlotButton, plot, plot, a, canvas, b, graph, fig, scatterValue, x, y, word, x1,y1, word1, limit
+        self.limit=50
         global checkFrame, textFrame, graphCheck, gradientCheck, exponentCheck, graphVar, gradientVar, expVar, textGraph, textGradient, textExp
+        self.gradientVar=0; self.graphVar=0; self.expVar=0
         global tableFrame, refreshTableButton, listNodes, scrollbar, wordFrame, queryFrame, queryResult, queryResultText, totalWordsLabel
         global n, W, sortedW
+        self.n, self.W = self.fileAna.textStats(self.currFile, True)
 
     def launchAnalysis(self):
         print("launching Analysis Frame")
@@ -33,12 +36,13 @@ class AnalysisFrame():
         menubar = tk.Menu(self.anaFrame)
         # TODO: menu for plotting
         plottingMenu = tk.Menu(menubar)
-        plottingMenu.add_command(label='Refresh Graph', command=lambda: self.buildPlot(50), accelerator="Ctrl-R")
-        self.anaFrame.bind_all("<Control-r>", lambda x: self.buildPlot(50))
-        plottingMenu.add_command(label='Plot Gradient')
+        plottingMenu.add_command(label='Refresh Graph', command=lambda: self.buildPlot(self.limit), accelerator="Ctrl+R")
+        self.anaFrame.bind_all("<Control-r>", lambda x: self.buildPlot(self.limit))
+        plottingMenu.add_command(label='Plot Gradient', command=lambda: self.calculateGradient(), accelerator="Ctrl+G")
+        self.anaFrame.bind_all("<Control-g>", lambda x: self.calculateGradient())
         plottingMenu.add_command(label='Calculate Exponent')
         plottingMenu.add_separator()
-        plottingMenu.add_command(label='Calculate Table', command=lambda: self.updateTable(), accelerator="Ctrl-T")
+        plottingMenu.add_command(label='Calculate Table', command=lambda: self.updateTable(), accelerator="Ctrl+T")
         self.anaFrame.bind_all("<Control-t>", lambda x: self.updateTable())
         plottingMenu.add_separator()
         plottingMenu.add_command(label='Exit Analysis', command= lambda:self.anaFrame.destroy(), accelerator="Ctrl+X")
@@ -56,13 +60,9 @@ class AnalysisFrame():
         # TODO: plotter on left side
         # TODO: Button plot gradient, calculate exponent of distribution
 
-        # build top
-        self.buildPlotterFrameTop()
-
         # plotting area
-        self.fig = Figure(figsize=(4, 4))
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.plotterFrame)
-        self.buildPlot(50)
+        self.buildPlotterFrameTop()
+        self.buildPlot(self.limit)
 
         #  Table with word statistics
         self.wordFrame = ttk.Frame(self.anaFrame, width=10)
@@ -155,7 +155,6 @@ class AnalysisFrame():
         self.queryResultText.pack(side=LEFT, anchor=W)
 
     def calcPlot(self, max):
-        self.n, self.W = self.fileAna.textStats(self.currFile, True)
         self.sortedW = dict()
         self.sortedW = self.fileAna.sortTextStats(self.W)
         x=np.array([])
@@ -163,7 +162,7 @@ class AnalysisFrame():
         word=np.array([])
         i = 0
         for k,v in self.sortedW:
-            if(i>=max):
+            if (i >= max):
                 break
             i+=1
             x= np.append(x,i)
@@ -173,16 +172,19 @@ class AnalysisFrame():
 
 
     def buildPlot(self, max):
-
+        self.limit = max
         self.plotterFrame.destroy()
         self.buildPlotterFrameTop()
         self.fig = Figure(figsize=(4, 4), dpi=100)
+        # TODO: adjust axis label (not visible)
+        # self.fig.subplots_adjust(wspace=0.6, hspace=0.6, left=0.1, bottom=0.22, right=0.96, top=0.96)
         self.a = self.fig.add_subplot(111)
-        x, y, word = self.calcPlot(max)
-        self.a.scatter(x, y, color='red')
+        # get values
+        self.x, self.y, self.word = self.calcPlot(max)
+        self.a.scatter(self.x, self.y, color='red')
 
-        for i, txt in enumerate(word):
-            self.a.annotate(txt, (i+1, y[i]), xycoords='data')
+        for i, txt in enumerate(self.word):
+            self.a.annotate(txt, (i + 1, self.y[i]), xycoords='data')
 
         self.a.set_title("Most frequent Words", fontsize=16)
         self.a.set_ylabel("Occurrences", fontsize=8)
@@ -191,55 +193,75 @@ class AnalysisFrame():
         self.a.set_xscale('log')
         self.a.set_yscale('log')
 
-        self.calculateSlope(x,y)
-
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.plotterFrame)
         self.canvas.get_tk_widget().pack(expand=True)
         # navigation bar
         toolbar= NavigationToolbar2Tk(self.canvas, self.plotterFrame)
         toolbar.update()
         self.canvas.draw()
-        # self.graph.pop(0).remove()
-        self.canvas.draw()
         self.buildPlotterFrameBottom()
+        # deselect gradient
+        self.gradientVar = 0
+        self.gradientCheck.deselect()
+
 
     # builds toplevel frame for plotting, builds part above plot (refresh button)
     def buildPlotterFrameTop(self):
         self.plotterFrame = ttk.Frame(self.anaFrame, width=400)
         self.plotterFrame.pack(side=LEFT, anchor=N, padx=10, pady=20)
+        # set value for visualisation
+        self.w2 = Scale(self.plotterFrame, from_=0, to=self.n, orient=HORIZONTAL, length=400, label="Number of Words")
+        self.w2.set(self.limit)
         # refresh
-        self.refreshPlotButton = ttk.Button(self.plotterFrame, text='Refresh Plot', width=13, command=lambda: self.buildPlot(50))
-        self.refreshPlotButton.pack(side=TOP, anchor=NW)
+        self.refreshPlotButton = ttk.Button(self.plotterFrame, text='Refresh Plot', width=13, command=lambda: self.buildPlot(self.w2.get()))
+        self.refreshPlotButton.pack(side=TOP, anchor=W)
+        self.w2.pack(side=TOP, padx=5)
 
     # builds part underneath plot (check buttons, textfields)
     def buildPlotterFrameBottom(self):
         # checkbutton frame
         self.checkFrame = ttk.Frame(self.plotterFrame, width=10)
         self.checkFrame.pack(side=LEFT, anchor=N)
-        self.graphVar = IntVar()
-        self.graphCheck = Checkbutton(self.checkFrame, text='Graph', variable=self.graphVar)
-        self.graphCheck.pack(side=TOP, anchor=W)
-        self.gradientVar = IntVar()
-        self.gradientCheck = Checkbutton(self.checkFrame, text='Gradient', variable=self.gradientVar)
+        self.gradientCheck = Checkbutton(self.checkFrame, text='Gradient', variable=self.gradientVar, command= lambda: self.calculateGradient())
         self.gradientCheck.pack(side=TOP, anchor=W)
-        self.expVar = IntVar()
-        self.exponentCheck = Checkbutton(self.checkFrame, text='Exponent', variable=self.expVar)
+        self.exponentCheck = Checkbutton(self.checkFrame, text='Exponent', variable=self.expVar, command= lambda: self.calculateExp())
         self.exponentCheck.pack(side=TOP, anchor=W)
 
         # TODO: Textbox for graph, gradient, exponent
         self.textFrame = ttk.Frame(self.plotterFrame, width=20)
         self.textFrame.pack(side=LEFT, anchor=N)
-        self.textGraph = Text(self.textFrame, width=20, height=1)
-        self.textGraph.pack(side=TOP)
-        self.textGradient = Text(self.textFrame, width=20, height=1)
+        self.textGradient = Text(self.textFrame, width=30, height=1)
+        self.textGradient.config(state=DISABLED)
         self.textGradient.pack(side=TOP)
-        self.textExp = Text(self.textFrame, width=20, height=1)
+        self.textExp = Text(self.textFrame, width=30, height=1)
         self.textExp.pack(side=TOP)
 
-    def calculateSlope(self, x, y):
-        a = [x[0], x[-1:]]
-        b = [y[0], y[-1:]]
-        self.graph = self.a.plot(a, b)
-        m = (y[0] - y[-1:]) / (x[0] - x[-1:])
-
+    def calculateGradient(self):
+        m = (self.y[0] - self.y[-1:]) / (self.x[0] - self.x[-1:])
+        # remove gradient
+        if(self.gradientVar==1):
+            self.graph.pop(0).remove()
+            self.canvas.draw()
+            self.textGradient.config(state=NORMAL)
+            self.textGradient.delete(1.0, tk.END)
+            self.textGradient.config(state=DISABLED)
+            self.gradientVar=0
+            self.gradientCheck.deselect()
+            print("gradient removed")
+        # activate gradient
+        elif(self.gradientVar==0):
+            a = [self.x[0], self.x[-1:]]
+            b = [self.y[0], self.y[-1:]]
+            self.graph = self.a.plot(a, b, color='b')
+            self.canvas.draw()
+            self.textGradient.config(state=NORMAL)
+            gradientVal="Gradient: ", m
+            self.textGradient.insert(tk.END, gradientVal)
+            self.textGradient.config(state=DISABLED)
+            self.gradientVar=1
+            self.gradientCheck.select()
+            print("gradient activated")
         return m
+
+    def calculateExp(self):
+        raise NotImplementedError
