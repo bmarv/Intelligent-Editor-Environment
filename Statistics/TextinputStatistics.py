@@ -1,5 +1,5 @@
-import Main
-from Basic_Gui.Fileoperations import *
+"""author: Marvin Beese"""
+
 import re
 
 class TextinputStatistics:

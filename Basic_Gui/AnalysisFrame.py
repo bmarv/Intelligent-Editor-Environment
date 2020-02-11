@@ -7,7 +7,6 @@ from ttkthemes import ThemedTk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
-from scipy.interpolate import *
 
 class AnalysisFrame():
     def __init__(self, file):
@@ -17,8 +16,8 @@ class AnalysisFrame():
         global anaFrame, stylettk
         global plotterFrame, refreshPlotButton, plot, plot, a, canvas, b, graph, fig, scatterValue, x, y, word, x1,y1, word1, limit
         self.limit=50
-        global checkFrame, textFrame, graphCheck, gradientCheck, exponentCheck, graphVar, gradientVar, expVar, textGraph, textGradient, textExp
-        self.gradientVar=0; self.graphVar=0; self.expVar=0
+        global checkFrame, textFrame, graphCheck, slopeCheck, exponentCheck, graphVar, slopeVar, expVar, textGraph, textSlope, textExp
+        self.slopeVar=0; self.graphVar=0; self.expVar=0
         global tableFrame, refreshTableButton, listNodes, scrollbar, wordFrame, queryFrame, queryResult, queryResultText, totalWordsLabel
         global n, W, sortedW
         self.n, self.W = self.fileAna.textStats(self.currFile, True)
@@ -33,12 +32,11 @@ class AnalysisFrame():
 
         # menubar
         menubar = tk.Menu(self.anaFrame)
-        # TODO: menu for plotting
         plottingMenu = tk.Menu(menubar)
-        plottingMenu.add_command(label='Refresh Graph', command=lambda: self.buildPlot(self.limit), accelerator="Ctrl+R")
-        self.anaFrame.bind_all("<Control-r>", lambda x: self.buildPlot(self.limit))
-        plottingMenu.add_command(label='Plot Gradient', command=lambda: self.calculateGradient(), accelerator="Ctrl+G")
-        self.anaFrame.bind_all("<Control-g>", lambda x: self.calculateGradient())
+        plottingMenu.add_command(label='Refresh Plot', command=lambda: self.buildPlot(self.limit), accelerator="Ctrl+P")
+        self.anaFrame.bind_all("<Control-p>", lambda x: self.buildPlot(self.limit))
+        plottingMenu.add_command(label='Calculate Slope', command=lambda: self.calculateSlope(), accelerator="Ctrl+S")
+        self.anaFrame.bind_all("<Control-s>", lambda x: self.calculateSlope())
         plottingMenu.add_command(label='Calculate Exponent')
         plottingMenu.add_separator()
         plottingMenu.add_command(label='Calculate Table', command=lambda: self.updateTable(), accelerator="Ctrl+T")
@@ -48,16 +46,16 @@ class AnalysisFrame():
         self.anaFrame.bind_all("<Control-x>", lambda x: self.anaFrame.destroy())
         menubar.add_cascade(label='Calculating', menu=plottingMenu)
 
-        # TODO: menu for output as .txt file
+        # menu for export
         outputMenu= tk.Menu(menubar)
-        outputMenu.add_command(label='Save Plot as PDF')
-        outputMenu.add_command(label='Save Table as .txt')
-        menubar.add_cascade(label='Saving Tools', menu=outputMenu)
+        outputMenu.add_command(label='Save Plot as PDF', command=lambda: self.savePlotAsPDF(), accelerator="Ctrl+Shift+P")
+        self.anaFrame.bind_all("<Control-P>", lambda x: self.savePlotAsPDF())
+        outputMenu.add_command(label='Save Table as txt', command= lambda: self.saveTableAsTxt(), accelerator="Ctrl+Shift+T")
+        self.anaFrame.bind_all("<Control-T>", lambda x: self.saveTableAsTxt())
+        menubar.add_cascade(label='Export', menu=outputMenu)
 
         self.anaFrame.configure(menu=menubar)
 
-        # TODO: plotter on left side
-        # TODO: Button plot gradient, calculate exponent of distribution
 
         # plotting area
         self.buildPlotterFrameTop()
@@ -175,8 +173,6 @@ class AnalysisFrame():
         self.plotterFrame.destroy()
         self.buildPlotterFrameTop()
         self.fig = Figure(figsize=(4, 4), dpi=100)
-        # TODO: adjust axis label (not visible)
-        # self.fig.subplots_adjust(wspace=0.6, hspace=0.6, left=0.1, bottom=0.22, right=0.96, top=0.96)
         self.a = self.fig.add_subplot(111)
         # get values
         self.x, self.y, self.word = self.calcPlot(max)
@@ -200,8 +196,8 @@ class AnalysisFrame():
         self.canvas.draw()
         self.buildPlotterFrameBottom()
         # deselect gradient
-        self.gradientVar = 0
-        self.gradientCheck.deselect()
+        self.slopeVar = 0
+        self.slopeCheck.deselect()
 
 
     # builds toplevel frame for plotting, builds part above plot (refresh button)
@@ -221,61 +217,81 @@ class AnalysisFrame():
         # checkbutton frame
         self.checkFrame = ttk.Frame(self.plotterFrame, width=10)
         self.checkFrame.pack(side=LEFT, anchor=N)
-        self.gradientCheck = Checkbutton(self.checkFrame, text='Gradient', variable=self.gradientVar, command= lambda: self.calculateGradient())
-        self.gradientCheck.pack(side=TOP, anchor=W)
+        self.slopeCheck = Checkbutton(self.checkFrame, text='Slope', variable=self.slopeVar, command= lambda: self.calculateSlope())
+        self.slopeCheck.pack(side=TOP, anchor=W)
         self.exponentCheck = Checkbutton(self.checkFrame, text='Exponent', variable=self.expVar, command= lambda: self.calculateExp())
         self.exponentCheck.pack(side=TOP, anchor=W)
 
-        # TODO: Textbox for graph, gradient, exponent
         self.textFrame = ttk.Frame(self.plotterFrame, width=20)
         self.textFrame.pack(side=LEFT, anchor=N)
-        self.textGradient = Text(self.textFrame, width=30, height=1)
-        self.textGradient.config(state=DISABLED)
-        self.textGradient.pack(side=TOP)
+        self.textSlope = Text(self.textFrame, width=30, height=1)
+        self.textSlope.config(state=DISABLED)
+        self.textSlope.pack(side=TOP)
         self.textExp = Text(self.textFrame, width=30, height=1)
         self.textExp.pack(side=TOP)
 
-    def calculateGradient(self):
-        # m = (self.y[0] - self.y[-1:]) / (self.x[0] - self.x[-1:])
-        # remove gradient
-        if(self.gradientVar==1):
+    def calculateSlope(self):
+        slope, intercept = np.polyfit(self.x, self.y, 1)
+        # remove old calculation
+        if(self.slopeVar==1):
             self.graph.pop(0).remove()
+            self.a.set_xscale('log')
+            self.a.set_yscale('log')
             self.canvas.draw()
-            self.textGradient.config(state=NORMAL)
-            self.textGradient.delete(1.0, tk.END)
-            self.textGradient.config(state=DISABLED)
-            self.gradientVar=0
-            self.gradientCheck.deselect()
-            print("gradient removed")
-        # activate gradient
-        elif(self.gradientVar==0):
-            # a = [self.x[0], self.x[-1:]]
-            # b = [self.y[0], self.y[-1:]]
-            # m,b, r,p,std=linregress(self.x, self.y)
-            # x_fit=np.arange(1, 12)
-            # y_fit= x_fit*m + b
-
-            slope, intercept = np.polyfit(self.x, self.y, 1)
-            # function = np.polyval(line, self.x)
-            startx=0; endx=12
-            starty=intercept; endy=intercept+12*slope
-
-
-            # starty=function[0]; endy=function[-1:][0]
-
-
-            # startx=self.x[0]; endx=self.limit
-            # starty=b; endy=starty+self.limit*m
+            self.textSlope.config(state=NORMAL)
+            self.textSlope.delete(1.0, tk.END)
+            self.textSlope.config(state=DISABLED)
+            self.slopeVar=0
+            self.slopeCheck.deselect()
+            print("Slope removed")
+        # activate slope
+        elif(self.slopeVar==0):
+            startx=0; endx=self.x[-1:]
+            starty=intercept; endy=intercept+self.x[-1:]*slope
+            # draw
             self.graph = self.a.plot([startx, endx],[starty,endy], color='b')
+            self.a.set_xscale('linear')
+            self.a.set_yscale('linear')
             self.canvas.draw()
-            self.textGradient.config(state=NORMAL)
-            # gradientVal="Gradient: ", m
-            # self.textGradient.insert(tk.END, gradientVal)
-            # self.textGradient.config(state=DISABLED)
-            self.gradientVar=1
-            self.gradientCheck.select()
-            print("gradient activated")
-        # return m
+            # numerical slope
+            self.textSlope.config(state=NORMAL)
+            slopeVal="Slope: ", slope
+            self.textSlope.insert(tk.END, slopeVal)
+            self.textSlope.config(state=DISABLED)
+            self.slopeVar=1
+            self.slopeCheck.select()
+            print("Slope activated")
+        return slope, intercept
 
+    # TODO: calculate exponent of distribution
     def calculateExp(self):
         raise NotImplementedError
+
+    def savePlotAsPDF(self):
+        filename= str(self.currFile).replace(".txt","_plot.pdf")
+        try:
+            self.fig.savefig(filename)
+            print("plot saved as pdf in ", filename)
+        except:
+            tk.messagebox.showerror(title="Saving Error", message="Unable to save file")
+            print("Failed to save file ", filename)
+
+    def saveTableAsTxt(self):
+        # get values
+        i = 0
+        outputTxt=""
+        for k, v in self.sortedW:
+            if (i >= 100):
+                break
+            i = i + 1
+            outputTxt += "{0}:\t{1}\t{2}\n".format(i, k, v)
+        # write into file
+        try:
+            filename = str(self.currFile).replace(".txt","_table.txt")
+            f = open(filename, 'w')
+            f.write(outputTxt)
+            f.close
+            print("File ", filename, " is saved")
+        except:
+            tk.messagebox.showerror(title="Saving Error", message="Unable to save file")
+            print("Failed to save file ", filename)

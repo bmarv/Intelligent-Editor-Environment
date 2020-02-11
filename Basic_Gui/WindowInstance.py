@@ -1,7 +1,6 @@
-"author: Marvin Beese"
+"""author: Marvin Beese"""
 
 import Basic_Gui.WindowTkinter as Window
-import Basic_Gui.WindowPyQt5 as WindowQt
 from os import path, environ
 class WindowInstance:
 
@@ -9,15 +8,15 @@ class WindowInstance:
     globalFilename = "Untitled.txt"
     global globalPath
     globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
-    global test
+    global instance
     print("launching Window...")
 
     def __init__(self):
         pass
 
     def newInstance(self):
-        test = Window.WindowTkinter()
-        # print("new Instance ", test)
+        self.instance = Window.WindowTkinter()
+
 
     "--- getter and setter for fileoperations"
     def setGlobalFilename(self, filename):

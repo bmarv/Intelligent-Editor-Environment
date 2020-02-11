@@ -1,3 +1,5 @@
+"""author: Marvin Beese"""
+
 import getpass
 import re
 
@@ -6,7 +8,7 @@ class FileAnalysis:
         global author, wordList
 
 
-    # datermines user of Windows/Unix System
+    # determines user of Windows/Unix System
     def getAuthor(self):
         self.author = getpass.getuser()
         return self.author

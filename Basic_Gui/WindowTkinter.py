@@ -1,11 +1,10 @@
-"author: Marvin Beese"
+"""author: Marvin Beese"""
 
 import tkinter as tk
 from tkinter.scrolledtext import *
 from tkinter.filedialog import *
 from tkinter import ttk
 from ttkthemes import ThemedTk
-import Main
 import Basic_Gui.WindowInstance as WinInstance
 import Basic_Gui.Fileoperations as Fileoperations
 import Basic_Gui.AnalysisFrame as AnaFrame
