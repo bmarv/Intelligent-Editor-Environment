@@ -27,20 +27,27 @@ class FileAnalysis:
         fileContent = re.sub("[\.\,\;\:\"\!\?]+","", str(fileContent))
         currWordList = self.splitstring(fileContent)
         # count words
-        wordOccurrences = len(currWordList)
-        wordDict=dict()
-        upperWords=[]
+        wordDict=dict(); fullwordList=[]; upperWords=[]
         if(ReturnDict==True):
             for word in currWordList:
-                # only get Eigennamen and Nomen through firstly checking all lowercase words and checking the remaining upper case letters afterwards
-                if(word[0].isupper()):
-                    upperWords.append(word)
-                    continue
-                # increment when already found in text
-                if word.casefold() in wordDict:
-                    wordDict[word.casefold()]+=1
-                else:
-                    wordDict[word]=1
+                if word.isalpha():
+                    fullwordList.append(word)
+                    # only get Eigennamen and Nomen through firstly checking all lowercase words and checking the remaining upper case letters afterwards
+                    if(word[0].isupper()):
+                        upperWords.append(word)
+                        continue
+                    # increment when already found in text
+                    if word.casefold() in wordDict:
+                        wordDict[word.casefold()]+=1
+                    else:
+                        wordDict[word]=1
+                # special case: apostrophe in word
+                elif "\'" in word:
+                    fullwordList.append(word)
+                    if word.casefold() in wordDict:
+                        wordDict[word.casefold()]+=1
+                    else:
+                        wordDict[word]=1
             for word in upperWords:
                 if word.casefold() in wordDict:
                     wordDict[word.casefold()]+=1
@@ -48,6 +55,7 @@ class FileAnalysis:
                     wordDict[word]+=1
                 else:
                     wordDict[word]=1
+        wordOccurrences = len(fullwordList)
         return wordOccurrences, wordDict
 
     def sortTextStats(self, List):

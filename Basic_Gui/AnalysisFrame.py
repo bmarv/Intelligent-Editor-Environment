@@ -7,6 +7,7 @@ from ttkthemes import ThemedTk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
+from scipy.interpolate import *
 
 class AnalysisFrame():
     def __init__(self, file):
@@ -128,7 +129,7 @@ class AnalysisFrame():
         self.listNodes.pack(side="left", fill="y")
         self.scrollbar.configure(command=self.listNodes.yview)
         # fill label with total number of words
-        totalWordsNr="Total Word Number without Duplicates:",self.n
+        totalWordsNr="Total Word Number:",self.n
         self.totalWordsLabel.config(text=totalWordsNr)
         self.totalWordsLabel.pack(side=TOP, anchor=W, fill="y")
 
@@ -235,7 +236,7 @@ class AnalysisFrame():
         self.textExp.pack(side=TOP)
 
     def calculateGradient(self):
-        m = (self.y[0] - self.y[-1:]) / (self.x[0] - self.x[-1:])
+        # m = (self.y[0] - self.y[-1:]) / (self.x[0] - self.x[-1:])
         # remove gradient
         if(self.gradientVar==1):
             self.graph.pop(0).remove()
@@ -248,18 +249,33 @@ class AnalysisFrame():
             print("gradient removed")
         # activate gradient
         elif(self.gradientVar==0):
-            a = [self.x[0], self.x[-1:]]
-            b = [self.y[0], self.y[-1:]]
-            self.graph = self.a.plot(a, b, color='b')
+            # a = [self.x[0], self.x[-1:]]
+            # b = [self.y[0], self.y[-1:]]
+            # m,b, r,p,std=linregress(self.x, self.y)
+            # x_fit=np.arange(1, 12)
+            # y_fit= x_fit*m + b
+
+            slope, intercept = np.polyfit(self.x, self.y, 1)
+            # function = np.polyval(line, self.x)
+            startx=0; endx=12
+            starty=intercept; endy=intercept+12*slope
+
+
+            # starty=function[0]; endy=function[-1:][0]
+
+
+            # startx=self.x[0]; endx=self.limit
+            # starty=b; endy=starty+self.limit*m
+            self.graph = self.a.plot([startx, endx],[starty,endy], color='b')
             self.canvas.draw()
             self.textGradient.config(state=NORMAL)
-            gradientVal="Gradient: ", m
-            self.textGradient.insert(tk.END, gradientVal)
-            self.textGradient.config(state=DISABLED)
+            # gradientVal="Gradient: ", m
+            # self.textGradient.insert(tk.END, gradientVal)
+            # self.textGradient.config(state=DISABLED)
             self.gradientVar=1
             self.gradientCheck.select()
             print("gradient activated")
-        return m
+        # return m
 
     def calculateExp(self):
         raise NotImplementedError
