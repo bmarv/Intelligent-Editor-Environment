@@ -35,7 +35,7 @@ class WindowTkinter:
     def launchWindow(self):
         print("Window launched: Tkinter")
         self.fileOP = Fileoperations.Fileoperations()
-        self.activeWindow = ThemedTk(theme='radiance')
+        self.activeWindow = ThemedTk(theme='arc')
         self.activeWindow.title("Intelligent Editor Environment")
         self.activeWindow.geometry("800x600")
         self.stylettk = ttk.Style()

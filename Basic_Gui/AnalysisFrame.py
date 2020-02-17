@@ -24,7 +24,7 @@ class AnalysisFrame():
 
     def launchAnalysis(self):
         print("launching Analysis Frame")
-        self.anaFrame = ThemedTk(theme='radiance')
+        self.anaFrame = ThemedTk(theme='arc')
         title="IEE - Text Analysis for", os.path.basename(self.currFile)
         self.anaFrame.title(title)
         self.anaFrame.geometry("800x600")
