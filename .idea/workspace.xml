@@ -5,13 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/Intelligent-Editor-Environment.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Intelligent-Editor-Environment.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Basic_Gui/AnalysisFrame.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/AnalysisFrame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Basic_Gui/WindowTkinter.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basic_Gui/WindowTkinter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5/sip.cp38-win32.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5/sip.cp38-win32.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5_sip-12.7.0.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5_sip-12.7.0.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5_sip-12.7.0.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/PyQt5_sip-12.7.0.dist-info/WHEEL" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +35,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files (x86)/Python38-32/python.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../YouTube-Statistician" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -81,7 +74,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\beese\Documents\Programming\Intelligent-Editor-Environment\venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\beese\AppData\Local\Programs\Python\Python38-32\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Basic_Gui" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -189,9 +182,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="72" y="203" key="#Notifications/0.0.1920.1080@0.0.1920.1080" timestamp="1578779959395" />
-    <state x="0" y="199" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581961684130">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="0" y="159" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582023366191">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
+    <state x="0" y="159" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1582023366191" />
     <state x="0" y="199" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1581961684130" />
     <state x="210" y="288" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1578774426018">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -205,29 +199,35 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="524" y="136" key="#xdebugger.evaluate/0.0.1536.864@0.0.1536.864" timestamp="1578919374953" />
-    <state x="376" y="278" key="FileChooserDialogImpl" timestamp="1581961528915">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="328" y="242" key="FileChooserDialogImpl" timestamp="1582046678276">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
+    <state x="301" y="222" key="FileChooserDialogImpl/0.0.1536.864@0.0.1536.864" timestamp="1582023409178" />
+    <state x="328" y="242" key="FileChooserDialogImpl/0.0.1676.943@0.0.1676.943" timestamp="1582046678276" />
     <state x="376" y="278" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1581961528915" />
-    <state width="1512" height="147" key="GridCell.Tab.0.bottom" timestamp="1581961794624">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1654" height="186" key="GridCell.Tab.0.bottom" timestamp="1582046679836">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
-    <state width="1515" height="167" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1581764798905" />
+    <state width="1515" height="167" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1582023619780" />
+    <state width="1654" height="186" key="GridCell.Tab.0.bottom/0.0.1676.943@0.0.1676.943" timestamp="1582046679836" />
     <state width="1512" height="147" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1581961794624" />
-    <state width="1512" height="147" key="GridCell.Tab.0.center" timestamp="1581961794624">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1654" height="186" key="GridCell.Tab.0.center" timestamp="1582046679831">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
-    <state width="1515" height="167" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1581764798904" />
+    <state width="1515" height="167" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1582023619780" />
+    <state width="1654" height="186" key="GridCell.Tab.0.center/0.0.1676.943@0.0.1676.943" timestamp="1582046679831" />
     <state width="1512" height="147" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1581961794624" />
-    <state width="1512" height="147" key="GridCell.Tab.0.left" timestamp="1581961794624">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1654" height="186" key="GridCell.Tab.0.left" timestamp="1582046679831">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
-    <state width="1515" height="167" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1581764798904" />
+    <state width="1515" height="167" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1582023619779" />
+    <state width="1654" height="186" key="GridCell.Tab.0.left/0.0.1676.943@0.0.1676.943" timestamp="1582046679831" />
     <state width="1512" height="147" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1581961794624" />
-    <state width="1512" height="147" key="GridCell.Tab.0.right" timestamp="1581961794624">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1654" height="186" key="GridCell.Tab.0.right" timestamp="1582046679836">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
-    <state width="1515" height="167" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1581764798904" />
+    <state width="1515" height="167" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1582023619780" />
+    <state width="1654" height="186" key="GridCell.Tab.0.right/0.0.1676.943@0.0.1676.943" timestamp="1582046679836" />
     <state width="1512" height="147" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1581961794624" />
     <state width="1899" height="292" key="GridCell.Tab.1.bottom" timestamp="1581438908310">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -249,10 +249,10 @@
     </state>
     <state width="1515" height="277" key="GridCell.Tab.1.right/0.0.1536.864@0.0.1536.864" timestamp="1580469290162" />
     <state width="1899" height="292" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1581438908310" />
-    <state x="98" y="166" width="914" height="864" key="SettingsEditor" timestamp="1581961692760">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="65" y="0" width="914" height="864" key="SettingsEditor" timestamp="1582023290921">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="65" y="0" width="914" height="864" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1581764673161" />
+    <state x="65" y="0" width="914" height="864" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1582023290921" />
     <state x="98" y="166" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1581961692760" />
     <state x="681" y="280" width="570" height="524" key="StructurePopup" timestamp="1581370036190">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -271,11 +271,12 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="92" y="92" width="1736" height="896" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1581435499930" />
-    <state x="525" y="292" key="com.intellij.ide.util.TipDialog" timestamp="1581764455939">
-      <screen x="0" y="0" width="1536" height="864" />
+    <state x="573" y="319" key="com.intellij.ide.util.TipDialog" timestamp="1582046499573">
+      <screen x="0" y="0" width="1676" height="943" />
     </state>
-    <state x="525" y="292" key="com.intellij.ide.util.TipDialog/0.0.1536.864@0.0.1536.864" timestamp="1581764455939" />
-    <state x="656" y="365" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1581428917049" />
+    <state x="525" y="292" key="com.intellij.ide.util.TipDialog/0.0.1536.864@0.0.1536.864" timestamp="1582023273047" />
+    <state x="573" y="319" key="com.intellij.ide.util.TipDialog/0.0.1676.943@0.0.1676.943" timestamp="1582046499573" />
+    <state x="656" y="365" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1582046395671" />
     <state x="769" y="458" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1581019969134">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
