@@ -8,8 +8,10 @@ from ttkthemes import ThemedTk
 import Basic_Gui.WindowInstance as WinInstance
 import Basic_Gui.Fileoperations as Fileoperations
 import Basic_Gui.AnalysisFrame as AnaFrame
+from Basic_Gui import ConfigRanGenerationFrame as ConfigGen
 from Statistics import TextinputStatistics as Textstats
 from Statistics import FileAnalysis as FileAna
+from Generation import RandomGeneration
 
 class WindowTkinter:
     def __init__(self):
@@ -37,25 +39,41 @@ class WindowTkinter:
         self.fileOP = Fileoperations.Fileoperations()
         self.activeWindow = ThemedTk(theme='arc')
         self.activeWindow.title("Intelligent Editor Environment")
-        self.activeWindow.geometry("800x600")
+        self.activeWindow.geometry("1080x700")
         self.stylettk = ttk.Style()
 
+        # build Frames for menubar, meta-info, text-editor, text-statistics
+        self.buildMenuBar()
+        self.buildMetaFrame()
+        self.buildEditorFrame()
+        self.buildTextStatistics()
+
+        # close button triggered
+        self.activeWindow.protocol("WM_DELETE_WINDOW", lambda: self.exitActivity(self.activeWindow, self.textField))
+
+        # mainloop
+        self.activeWindow.mainloop()
+        print("Window closed")
+
+    def buildMenuBar(self):
         # get Menubar for basic actions
         menubar = tk.Menu(self.activeWindow)
 
         # filemenu for menubar
         fileMenu = tk.Menu(menubar)
-        fileMenu.add_command(label='New File', command=lambda: self.fileOP.newFile(self.textField), accelerator="Ctrl+N")
-        self.activeWindow.bind_all("<Control-n>", lambda x:self.fileOP.newFile(self.textField))
+        fileMenu.add_command(label='New File', command=lambda: self.fileOP.newFile(self.textField),
+                             accelerator="Ctrl+N")
+        self.activeWindow.bind_all("<Control-n>", lambda x: self.fileOP.newFile(self.textField))
         fileMenu.add_command(label='Open', command=lambda: self.openFileActivity(), accelerator="Ctrl+O")
-        self.activeWindow.bind_all("<Control-o>", lambda x:self.openFileActivity())
+        self.activeWindow.bind_all("<Control-o>", lambda x: self.openFileActivity())
         fileMenu.add_command(label='Save', command=lambda: self.saveActivity(), accelerator="Ctrl+S")
         self.activeWindow.bind_all("<Control-s>", lambda x: self.saveActivity())
         fileMenu.add_command(label='Save As', command=lambda: self.saveAsActivity(), accelerator="Ctrl+Shift+S")
-        self.activeWindow.bind_all("<Control-S>", lambda x:self.saveAsActivity())
+        self.activeWindow.bind_all("<Control-S>", lambda x: self.saveAsActivity())
         fileMenu.add_separator()
-        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),accelerator="Ctrl+X")
-        self.activeWindow.bind_all("<Control-x>", lambda x:self.exitActivity(self.activeWindow, self.textField))
+        fileMenu.add_command(label='Exit', command=lambda: self.exitActivity(self.activeWindow, self.textField),
+                             accelerator="Ctrl+X")
+        self.activeWindow.bind_all("<Control-x>", lambda x: self.exitActivity(self.activeWindow, self.textField))
 
         menubar.add_cascade(label='File', menu=fileMenu)
 
@@ -72,24 +90,36 @@ class WindowTkinter:
         self.activeWindow.bind_all("<Alt-f>", lambda x: self.changeFont())
         menubar.add_cascade(label='Edit', menu=editMenu)
 
-
         # Analysis Actions for menubar
         analysisMenu = tk.Menu(menubar)
-        analysisMenu.add_command(label='Analysis for Text-Input', command=lambda: self.analysisTextBox(), accelerator="Ctrl-Shift-A")
+        analysisMenu.add_command(label='Analysis for Text-Input', command=lambda: self.analysisTextBox(),
+                                 accelerator="Ctrl-Shift-A")
         self.activeWindow.bind_all("<Control-A>", lambda x: self.analysisTextBox())
-        analysisMenu.add_command(label='Analysis for File', command=lambda: self.analysisSeparateFile(), accelerator="Ctrl-Shift-F")
+        analysisMenu.add_command(label='Analysis for File', command=lambda: self.analysisSeparateFile(),
+                                 accelerator="Ctrl-Shift-F")
         self.activeWindow.bind_all("<Control-F>", lambda x: self.analysisSeparateFile())
         menubar.add_cascade(label='Analysis', menu=analysisMenu)
 
+        # Generation Menubar
+        generationMenu = tk.Menu(menubar)
+        generationMenu.add_command(label='Random Generation for Current File', command=lambda: self.randomGeneration(), accelerator='Ctrl+G')
+        self.activeWindow.bind_all("<Control-g>", lambda x: self.randomGeneration())
+        generationMenu.add_command(label='Random Generation for New File', command=lambda: self.randomGeneration(True), accelerator='Ctrl+Shift+G')
+        self.activeWindow.bind_all("<Control-G>", lambda x: self.randomGeneration())
+        menubar.add_cascade(label='Text-Generation', menu=generationMenu)
+
         self.activeWindow.config(menu=menubar)
 
+    def buildMetaFrame(self):
         # frame for meta information
-        self.metaFrame = ttk.LabelFrame(self.activeWindow, text="Document-Information",width=800, height=5)
+        self.metaFrame = ttk.LabelFrame(self.activeWindow, text="Document-Information", width=800, height=5)
         self.metaFrame.pack()
 
         # button and textview for metainformation
         self.stylettk.configure('my.TButton', font=('Helvetica', 8))
-        self.metaRefresh = ttk.Button(self.metaFrame,  text="Save & Refresh", width=13, command= lambda: self.calculateFileStats(self.metaText, self.textField), style='my.TButton')
+        self.metaRefresh = ttk.Button(self.metaFrame, text="Save & Refresh", width=13,
+                                      command=lambda: self.calculateFileStats(self.metaText, self.textField),
+                                      style='my.TButton')
         self.metaRefresh.pack(side=LEFT)
         # self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
         self.metaText = Text(self.metaFrame, width=100, height=1)
@@ -100,38 +130,33 @@ class WindowTkinter:
         self.metaText.config(state=tk.DISABLED)
         self.metaText.pack()
 
-
+    def buildEditorFrame(self):
         # frame for text
         self.textFrame = ttk.LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
         self.textFrame.pack()
 
-        #set ScrolledText-Field inside textFrame
-        self.textField = ScrolledText(self.textFrame, font=('helvetica',12), undo=TRUE, width=100)
+        # set ScrolledText-Field inside textFrame
+        self.textField = ScrolledText(self.textFrame, font=('helvetica', 12), undo=TRUE, width=100)
         self.textField.pack()
 
+    def buildTextStatistics(self):
         # frame for statistics
         self.statsFrame = ttk.LabelFrame(self.activeWindow, text="Statistics", width=800, height=100)
         self.statsFrame.pack()
 
         # button and textview for textinput
         # invoke statistics
-        self.calcStats = ttk.Button(self.statsFrame, text="Calculate", width=13, command= lambda: self.calculateStats(self.textField), style='my.TButton')
+        self.calcStats = ttk.Button(self.statsFrame, text="Calculate", width=13,
+                                    command=lambda: self.calculateStats(self.textField), style='my.TButton')
         self.calcStats.pack(side=LEFT)
         self.activeWindow.bind_all("<Control-C>", lambda x: self.calculateStats(self.textField))
-        self.statsValue = "Letters: ", self.letterNumber, "\t Words: ", self.wordNumber,"\t Sentences: ", self.sentenceNumber,"\t Lines: ",self.linesNumber
+        self.statsValue = "Letters: {0} | Words: {1} | Sentences: {2} | Lines: {3}".format(self.letterNumber, self.wordNumber, self.sentenceNumber, self.linesNumber)
         self.statsText = Text(self.statsFrame, width=100, height=1)
         self.statsText.config(state=tk.NORMAL)
         self.statsText.delete(1.0, tk.END)
         self.statsText.insert(tk.END, self.statsValue)
         self.statsText.config(state=tk.DISABLED)
         self.statsText.pack(side=RIGHT)
-
-        # close button triggered
-        self.activeWindow.protocol("WM_DELETE_WINDOW", lambda: self.exitActivity(self.activeWindow, self.textField))
-
-        # mainloop
-        self.activeWindow.mainloop()
-        print("Window closed")
 
     def getActiveWindow(self):
         return activeWindow
@@ -150,7 +175,7 @@ class WindowTkinter:
         # count lines
         self.linesNumber = Textstats.TextinputStatistics().countLines(text)
         # write out stats
-        self.statsValue = "Letters: ", self.letterNumber, "\t Words: ", self.wordNumber,"\t Sentences: ", self.sentenceNumber,"\t Lines: ",self.linesNumber
+        self.statsValue = "Letters: {0} | Words: {1} | Sentences: {2} | Lines: {3}".format(self.letterNumber, self.wordNumber, self.sentenceNumber, self.linesNumber)
         self.statsText.config(state=tk.NORMAL)
         self.statsText.delete(1.0, tk.END)
         self.statsText.insert(tk.END, self.statsValue)
@@ -166,8 +191,9 @@ class WindowTkinter:
         self.author = stats.getAuthor()
         # filesize
         filesizemessage = re.sub("[{}(),'']","",self.instance.getFileSizeMessage())
+        filesizemessage = re.sub("\s\s"," ", filesizemessage)
         # write out stats
-        self.metaValue = "Filename: ", self.fileName, "\tFilesize: ", filesizemessage,"\tAuthor:", self.author
+        self.metaValue = "Filename: {0} | Filesize: {1} | Author: {2}".format(self.fileName, filesizemessage,self.author)
         self.metaText.config(state=tk.NORMAL)
         self.metaText.delete(1.0, tk.END)
         self.metaText.insert(tk.END, self.metaValue)
@@ -247,3 +273,30 @@ class WindowTkinter:
         self.fileOP.saveAs(self.textField)
         self.calculateFileStats(self.metaText, self.textField)
         self.calculateStats(self.textField)
+
+    def randomGeneration(self, newFile=False):
+        if(newFile==False):
+            file= "for Current File"
+            # TODO: mainloop-Problem:
+            """ Problem:
+                -mainloop cannot be closed without destroying the whole Class-Instance - cannot invoke getAttributes Method
+                -cannot set values in this class remotely because this would start a new Instance of this Class
+                """
+            """ Idea:
+                -write config into config file and read it from this class 
+                -setAttributes in one shared class"""
+            ConfigRandom = ConfigGen.ConfigRanGenerationFrame().launchWindow(file, self.textField)
+            # letterProb, lineBreak, stepSize = ConfigRandom.getAttributes()
+            # ConfigRandom.exitActivity()
+            # TODO: generate text
+            # randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
+            # TODO: add text to textField
+        else:
+            file= "for New File"
+            ConfigRandom = ConfigGen.ConfigRanGenerationFrame().launchWindow(file)
+            letterProb, lineBreak, stepSize = ConfigRandom.getAttributes()
+            # ConfigRandom.exitActivity()
+            # TODO: generate text
+            # randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
+            # TODO: new File
+

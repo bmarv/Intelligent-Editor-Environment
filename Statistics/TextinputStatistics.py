@@ -18,11 +18,10 @@ class TextinputStatistics:
     # count words
     def countWords(self, extText):
         # split string for blank spaces
-        extText = re.sub("[\.\,\;\:\"\!\?]+", "", str(extText))
-        splittedBlankspace = str(extText).split()
+        splittedpunctuation = re.split(r'[\.\,\;\s\:\"\!\?]\s*', str(extText))
         # include only alphabetic-elements in array
         splittedWords = []
-        for el in splittedBlankspace:
+        for el in splittedpunctuation:
             if el.isalpha():
                 splittedWords.append(el)
             elif "\'" in el:

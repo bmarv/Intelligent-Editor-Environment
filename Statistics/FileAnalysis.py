@@ -15,7 +15,7 @@ class FileAnalysis:
 
     # get words from input string and returns List of words
     def splitstring(self, textInput):
-        self.wordList = str(textInput).split()
+        self.wordList = re.split(r'[\.\,\;\s\:\"\!\?]\s*', str(textInput))
         return self.wordList
 
     # input file to count including words,
@@ -25,8 +25,6 @@ class FileAnalysis:
         print(file)
         f= open(file, mode='r')
         fileContent = f.read()
-        # fileContent= re.sub("[\.\!\?]\s[A-ZÄÖÜ]","")
-        fileContent = re.sub("[\.\,\;\:\"\!\?]+","", str(fileContent))
         currWordList = self.splitstring(fileContent)
         # count words
         wordDict=dict(); fullwordList=[]; upperWords=[]
