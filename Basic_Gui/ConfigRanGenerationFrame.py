@@ -1,9 +1,11 @@
 """author: Marvin Beese"""
 
 import tkinter as tk
+import os
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from Generation import RandomGeneration
+from Basic_Gui import WindowInstance, WindowTkinter
 
 class ConfigRanGenerationFrame:
     def __init__(self):
@@ -25,6 +27,9 @@ class ConfigRanGenerationFrame:
         self.buildLineBreakArea()
         # build steps & start
         self.buildStepsArea()
+
+        # close button triggered
+        self.activeWindow.protocol("WM_DELETE_WINDOW", lambda: self.exitActivity())
 
         # mainloop
         self.activeWindow.mainloop()
@@ -105,9 +110,20 @@ class ConfigRanGenerationFrame:
 
     def getAttributes(self):
         print("Letter-Probability ",self.letterProba,", Linebreak: ", self.lineBreak,", Stepsize: ", self.stepSize)
-        RandomGeneration.RandomGeneration().setAttributes(self.letterProba, self.lineBreak, self.stepSize)
+        self.writeToConfigFile()
         return self.letterProba, self.lineBreak, self.stepSize
 
     def exitActivity(self):
         self.activeWindow.quit()
+        self.activeWindow.destroy()
         print("Configuration for Random Text-Generation closed!")
+
+    def writeToConfigFile(self):
+        instance = WindowInstance.WindowInstance()
+        currPath=instance.getGlobalPath()
+        location = os.path.join(currPath,"RandomTextConfig.txt")
+        file = open(location, "w")
+        info= "{0} {1} {2}".format(self.letterProba, self.lineBreak, self.stepSize)
+        file.write(info)
+        file.close()
+

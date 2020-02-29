@@ -1,7 +1,5 @@
 import unittest
 import re
-import string
-import numpy as np
 from Generation import RandomGeneration
 
 class MyTestCase(unittest.TestCase):

@@ -93,19 +93,19 @@ class WindowTkinter:
         # Analysis Actions for menubar
         analysisMenu = tk.Menu(menubar)
         analysisMenu.add_command(label='Analysis for Text-Input', command=lambda: self.analysisTextBox(),
-                                 accelerator="Ctrl-Shift-A")
+                                 accelerator="Ctrl+Shift+A")
         self.activeWindow.bind_all("<Control-A>", lambda x: self.analysisTextBox())
         analysisMenu.add_command(label='Analysis for File', command=lambda: self.analysisSeparateFile(),
-                                 accelerator="Ctrl-Shift-F")
+                                 accelerator="Ctrl+Shift+F")
         self.activeWindow.bind_all("<Control-F>", lambda x: self.analysisSeparateFile())
-        menubar.add_cascade(label='Analysis', menu=analysisMenu)
+        menubar.add_cascade(label='Mathematical Analysis', menu=analysisMenu)
 
         # Generation Menubar
         generationMenu = tk.Menu(menubar)
         generationMenu.add_command(label='Random Generation for Current File', command=lambda: self.randomGeneration(), accelerator='Ctrl+G')
         self.activeWindow.bind_all("<Control-g>", lambda x: self.randomGeneration())
         generationMenu.add_command(label='Random Generation for New File', command=lambda: self.randomGeneration(True), accelerator='Ctrl+Shift+G')
-        self.activeWindow.bind_all("<Control-G>", lambda x: self.randomGeneration())
+        self.activeWindow.bind_all("<Control-G>", lambda x: self.randomGeneration(True))
         menubar.add_cascade(label='Text-Generation', menu=generationMenu)
 
         self.activeWindow.config(menu=menubar)
@@ -274,29 +274,33 @@ class WindowTkinter:
         self.calculateFileStats(self.metaText, self.textField)
         self.calculateStats(self.textField)
 
+    # Generation of Random Text for the current or a new File
     def randomGeneration(self, newFile=False):
         if(newFile==False):
             file= "for Current File"
-            # TODO: mainloop-Problem:
-            """ Problem:
-                -mainloop cannot be closed without destroying the whole Class-Instance - cannot invoke getAttributes Method
-                -cannot set values in this class remotely because this would start a new Instance of this Class
-                """
-            """ Idea:
-                -write config into config file and read it from this class 
-                -setAttributes in one shared class"""
-            ConfigRandom = ConfigGen.ConfigRanGenerationFrame().launchWindow(file, self.textField)
-            # letterProb, lineBreak, stepSize = ConfigRandom.getAttributes()
-            # ConfigRandom.exitActivity()
-            # TODO: generate text
-            # randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
-            # TODO: add text to textField
+            # write config into config file and read it from this class
+            ConfigRandom = ConfigGen.ConfigRanGenerationFrame().launchWindow(file)
+            configFile = os.path.join(self.instance.getGlobalPath(),"RandomTextConfig.txt")
+            configInfo = str(open(configFile, "r").read())
+            letterProb, lineBreak, stepSize= configInfo.split()
+            letterProb= float(letterProb)
+            lineBreak = int(lineBreak)
+            stepSize = int(stepSize)
+            # generate text
+            randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
+            # add text to textField
+            self.textField.insert(END, randomText)
         else:
             file= "for New File"
             ConfigRandom = ConfigGen.ConfigRanGenerationFrame().launchWindow(file)
-            letterProb, lineBreak, stepSize = ConfigRandom.getAttributes()
-            # ConfigRandom.exitActivity()
-            # TODO: generate text
-            # randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
-            # TODO: new File
-
+            configFile = os.path.join(self.instance.getGlobalPath(), "RandomTextConfig.txt")
+            configInfo = str(open(configFile, "r").read())
+            letterProb, lineBreak, stepSize = configInfo.split()
+            letterProb = float(letterProb)
+            lineBreak = int(lineBreak)
+            stepSize = int(stepSize)
+            # generate text
+            randomText = RandomGeneration.RandomGeneration().randomTextGeneration(letterProb, lineBreak, stepSize)
+            # new File
+            self.fileOP.newFile(self.textField)
+            self.textField.insert(0.0, randomText)

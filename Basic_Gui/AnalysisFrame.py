@@ -60,10 +60,10 @@ class AnalysisFrame():
 
         # menu for export
         outputMenu = tk.Menu(menubar)
-        outputMenu.add_command(label='Save Plot as PDF', command=lambda: self.savePlotAsPDF(),
+        outputMenu.add_command(label='Save Plot as .pdf', command=lambda: self.savePlotAsPDF(),
                                accelerator="Ctrl+Shift+P")
         self.anaFrame.bind_all("<Control-P>", lambda x: self.savePlotAsPDF())
-        outputMenu.add_command(label='Save Table as txt', command=lambda: self.saveTableAsTxt(),
+        outputMenu.add_command(label='Save Table as .txt', command=lambda: self.saveTableAsTxt(),
                                accelerator="Ctrl+Shift+T")
         self.anaFrame.bind_all("<Control-T>", lambda x: self.saveTableAsTxt())
         menubar.add_cascade(label='Export', menu=outputMenu)
@@ -316,7 +316,7 @@ class AnalysisFrame():
         i = 0
         outputTxt=""
         for k, v in self.sortedW:
-            if (i >= 100):
+            if (i >= self.limit):
                 break
             i = i + 1
             outputTxt += "{0}:\t{1}\t{2}\n".format(i, k, v)
