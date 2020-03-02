@@ -1,5 +1,10 @@
-"author: Marvin Beese"
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
+""" PyQt5 is GUI-Framework
+    The Development with that has been discontinued due to extreme Performance-Problems
+    compared with Tkinter
+"""
 # import Basic_Gui.Fileoperations as Fileoperations
 # from PyQt5 import QtWidgets
 # from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QTextEdit, QWidget, QPushButton, QVBoxLayout

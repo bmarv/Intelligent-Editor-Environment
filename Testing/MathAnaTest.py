@@ -1,3 +1,6 @@
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
+
 import unittest
 from Statistics import MathematicalAnalysis
 

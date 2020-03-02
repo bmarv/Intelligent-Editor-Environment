@@ -1,24 +1,29 @@
-"""author: Marvin Beese"""
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 import Basic_Gui.WindowTkinter as Window
 from os import path, environ
+
+"""Class for invoking new WindowTkinter-Instances of the Program.
+    Every Instance includes the same Meta-Data
+    (filename, path, filesize).
+"""
 class WindowInstance:
 
-    global globalFilename
-    globalFilename = "Untitled.txt"
-    global globalPath
-    globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
-    global instance
-    print("launching Window...")
-
     def __init__(self):
-        pass
+        global globalFilename
+        globalFilename = "Untitled.txt"
+        global globalPath
+        globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
+        global instance
 
     def newInstance(self):
+        # new program-instance
+        print("launching Instance...")
         self.instance = Window.WindowTkinter()
 
 
-    "--- getter and setter for fileoperations"
+    """getter and setter for fileoperations"""
     def setGlobalFilename(self, filename):
         global globalFilename
         globalFilename = filename
@@ -37,6 +42,7 @@ class WindowInstance:
         print("\tglobalpath: ", globalPath)
         return globalPath
 
+    """calculation of the filesize of the current file. Separate values for byte, kilobyte and megabyte"""
     def getFileSizeMessage(self):
         joinedpath = path.abspath(path.join(globalPath, globalFilename))
         print(joinedpath)

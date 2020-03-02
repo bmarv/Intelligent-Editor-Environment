@@ -1,4 +1,6 @@
-"author: Marvin Beese"
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
+
 import tkinter as tk
 from tkinter.filedialog import *
 from tkinter import ttk
@@ -9,6 +11,11 @@ import numpy as np
 from Statistics import FileAnalysis
 from Statistics import MathematicalAnalysis
 
+""" GUI for mathematical analyses calculated in Statistics/MathematicalAnalysis.
+    Display and Interaction for a graphical plot, a word table, word-occurrences search,
+    slope-calculation of the distribution, Zipf-exponent of the distribution
+    and probability calculation of the Zipf-Probability-Mass-Function
+"""
 class AnalysisFrame():
     def __init__(self, file):
         global currFile, fileAna, MathAna
@@ -43,6 +50,7 @@ class AnalysisFrame():
         self.anaFrame.mainloop()
         print("Analysis Frame closed for {0}".format(os.path.basename(self.currFile)))
 
+    """menubar for calculation and exporting of data"""
     def buildmenuBar(self):
         # menubar
         menubar = tk.Menu(self.anaFrame)
@@ -70,11 +78,13 @@ class AnalysisFrame():
 
         self.anaFrame.configure(menu=menubar)
 
+    """plot area consists of FrameTop, Plot and FrameBottom (invoked in buildPlot())"""
     def buildPlotArea(self):
         # plotting area
         self.buildPlotterFrameTop()
         self.buildPlot(self.limit)
 
+    """calc plot with defined word-limit. Rank (i), Occurrences (v) and Word (k) are used"""
     def calcPlot(self, limit):
         self.sortedW = dict()
         self.sortedW = self.fileAna.sortTextStats(self.W)
@@ -91,7 +101,7 @@ class AnalysisFrame():
             word= np.append(word, k)
         return x,y,word
 
-    # builds toplevel frame for plotting, builds part above plot (refresh button)
+    """frame for setting the limit using a scale and an entry"""
     def buildPlotterFrameTop(self):
         self.plotterFrame = ttk.Frame(self.anaFrame, width=400)
         self.plotterFrame.pack(side=LEFT, anchor=N, padx=10, pady=20)
@@ -110,6 +120,7 @@ class AnalysisFrame():
         self.w2.pack(side=LEFT, padx=3)
         plotLimitEntry.pack(side=LEFT)
 
+    """builds plot and build word table for new setted limit"""
     def limitUpdated(self, value):
         self.limit= value
         if(int(value)>int(self.max)):
@@ -118,7 +129,7 @@ class AnalysisFrame():
         self.wordFrame.destroy()
         self.buildWordTable()
 
-
+    """points are scattered in double-log scale using matplotlib. """
     def buildPlot(self, limit):
         self.limit = limit
         self.plotterFrame.destroy()
@@ -154,8 +165,7 @@ class AnalysisFrame():
         self.expVar = 0
         self.exponentCheck.deselect()
 
-
-    # builds part underneath plot (check buttons, textfields)
+    """frame for slope and zipfian exponent"""
     def buildPlotterFrameBottom(self):
         # checkbutton frame
         self.checkFrame = ttk.Frame(self.plotterFrame, width=10)
@@ -173,6 +183,7 @@ class AnalysisFrame():
         self.textExp = Text(self.textFrame, width=30, height=1)
         self.textExp.pack(side=TOP)
 
+    """exports current plot to a .pdf-file"""
     def savePlotAsPDF(self):
         filename= str(self.currFile).replace(".txt","_plot.pdf")
         try:
@@ -182,6 +193,9 @@ class AnalysisFrame():
             tk.messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("Failed to save file ", filename)
 
+    """word table contains a scrolled list, a frame for the total number of words in the text,
+        a frame for the query of a rank of specific words, a frame for the zipfian probability mass function
+        and a frame for the estimated occurrences and the corresponding deviation"""
     def buildWordTable(self):
         #  Table with word statistics
         self.wordFrame = ttk.Frame(self.anaFrame, width=10)
@@ -257,8 +271,8 @@ class AnalysisFrame():
         self.deviationResultText.configure(state=DISABLED)
         self.deviationResultText.pack(side=LEFT, anchor=N, padx=5, pady=5)
 
-    # reloads table with freshly calculated values
-    # reloads label under table with total number of words
+    """ reloads table with freshly calculated values
+        reloads label under table with total number of words"""
     def updateTable(self):
         # get TextStats
         self.n,self.W = self.fileAna.textStats(self.currFile, True)
@@ -293,7 +307,7 @@ class AnalysisFrame():
         self.totalWordsLabel.config(text=totalWordsNr)
         self.totalWordsLabel.pack(side=TOP, anchor=W, fill="y")
 
-    # query for word in file
+    """ query for word in file"""
     def searchForWord(self, query):
         self.W=dict()
         self.updateTable() #consistency with table
@@ -311,6 +325,7 @@ class AnalysisFrame():
         self.queryResultText.config(state=DISABLED)
         self.queryResultText.pack(side=RIGHT, anchor=N, pady=5)
 
+    """saves table in a .txt-file"""
     def saveTableAsTxt(self):
         # get values
         i = 0
@@ -331,6 +346,8 @@ class AnalysisFrame():
             tk.messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("Failed to save file ", filename)
 
+    """calculates the slope of the deviation using linear regression analysis
+        plots in a double linear graph"""
     def calcSlope(self):
         slope = self.MathAna.linRegSlope(self.x, self.y, self.x.size)
         # remove old calculation
@@ -364,6 +381,7 @@ class AnalysisFrame():
             print("Slope activated")
         return slope
 
+    """calculates the zipfian exponent"""
     def calcExpZipf(self):
         expZipf = self.MathAna.exponentZipf(self.x, self.y, self.x.size)
         if (self.expVar == 1):
@@ -385,7 +403,7 @@ class AnalysisFrame():
             print("Exponent of Zipf-Distribution activated")
         return expZipf
 
-    "set fields for Zipf-Probability, estimated Occurrences, deviation"
+    "set fields for Zipf-Probability-Mass-Function, estimated Occurrences, deviation"
     def getProbZipf(self, rank):
         if(self.x.size< self.limit):
             self.limit=self.x.size
@@ -402,7 +420,7 @@ class AnalysisFrame():
         self.probResultText.insert(tk.END, probability)
         self.probResultText.config(state=DISABLED)
         self.probResultText.pack(side=RIGHT, anchor=N, pady=5)
-        # estimated
+        # estimated occurrences
         self.estimatedText.config(state=NORMAL)
         self.estimatedText.delete(1.0, END)
         self.estimatedText.insert(tk.END, estOccurrences)

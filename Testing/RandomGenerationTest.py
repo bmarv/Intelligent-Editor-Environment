@@ -1,8 +1,12 @@
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
+
 import unittest
 import re
 from Generation import RandomGeneration
 
 class MyTestCase(unittest.TestCase):
+
     RandomGen = RandomGeneration.RandomGeneration()
 
     # randomLetter: single german/english letter

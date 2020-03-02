@@ -1,8 +1,15 @@
-"""author: Marvin Beese"""
+#!/usr/bin/env python
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 from tkinter.filedialog import *
 from tkinter import messagebox
 from Basic_Gui import WindowInstance as WinInstance
+
+"""Fileoperations are invoked in several cases:
+    creation of a new file, saving of an existing file, saving of a file with a different path/name, opening an existing file.
+    For every action the respective path and filename gets updated and the fileintegrity gets checked 
+"""
 
 class Fileoperations:
     def __init__(self):
@@ -12,7 +19,7 @@ class Fileoperations:
         global instance
         instance= WinInstance.WindowInstance()
 
-    # create new File
+    """ create new File"""
     def newFile(self, extText):
         self.filename = "Untitled.txt"
         # newInstance = Main.instance2
@@ -24,7 +31,7 @@ class Fileoperations:
         instance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
         print("new File ", self.filename," in use")
 
-    # save changes in the file
+    """save changes in the file, checks also for fileintegrity"""
     def saveFile(self, extText):
         self.getFilePath()
         if(self.filename==None):
@@ -44,7 +51,7 @@ class Fileoperations:
             messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("File ", self.filename, " could not be saved")
 
-    # save File in custom path
+    """ save File in custom path, checks also for fileintegrity """
     def saveAs(self, extText):
         self.getFilePath()
         f = asksaveasfile(mode='w', defaultextension='.txt')
@@ -61,7 +68,7 @@ class Fileoperations:
             messagebox.showerror(title="Saving Error", message="Unable to save file")
             print("Failed to save file ", f.name)
 
-    # open any file
+    """ opens the choosen text-file"""
     def openFile(self, extText):
         f = askopenfile(mode='r', title="Select File to open")
         print("open File ",f.name)
@@ -74,11 +81,14 @@ class Fileoperations:
         instance.setGlobalFilename(self.filename)
         print("File ",self.filename," opened")
 
+    """getter for the current directory, filename and filepath"""
     def getFilePath(self):
         self.curDir = instance.getGlobalPath()
         self.filename = instance.getGlobalFilename()
         self.filePath = os.path.join(self.curDir, self.filename)
 
+    """checks for file integrity
+        compares whether the text field has the same content as the file with the filename"""
     def checkFileIntegrity(self, extText):
         # get path
         self.getFilePath()

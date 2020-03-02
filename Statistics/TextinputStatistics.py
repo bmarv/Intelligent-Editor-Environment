@@ -1,7 +1,9 @@
-"""author: Marvin Beese"""
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 import re
 
+"""Calculation of the Statistics of the current Textfile regarding the letter-, word-, sentence- and linescount"""
 class TextinputStatistics:
     def __init__(self):
         global letterNumber
@@ -9,15 +11,15 @@ class TextinputStatistics:
         global sentenceNumber
         global linesNumber
 
-    # count letters
+    """ count letters"""
     def countLetters(self, extText):
         self.letterNumber = len(extText)-1
         print("letternumber:\t",self.letterNumber)
         return self.letterNumber
 
-    # count words
+    """count words"""
     def countWords(self, extText):
-        # split string for blank spaces
+        # split string for blank spaces and interpunction
         splittedpunctuation = re.split(r'[\.\,\;\s\:\"\!\?]\s*', str(extText))
         # include only alphabetic-elements in array
         splittedWords = []
@@ -31,7 +33,7 @@ class TextinputStatistics:
         print("wordnumber:\t", self.wordNumber)
         return self.wordNumber
 
-    # count sentences
+    """count sentences"""
     def countSentences(self, extText):
         # split extText for punctuation
         extText = re.sub("(\.(\.)+)","",str(extText))
@@ -41,7 +43,7 @@ class TextinputStatistics:
         print("sentencenumber:\t", self.sentenceNumber)
         return self.sentenceNumber
 
-    # count Lines
+    """count Lines"""
     def countLines(self, extText):
         # split for newlines
         splittedLines = str(extText).split("\n")

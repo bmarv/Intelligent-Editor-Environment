@@ -1,4 +1,5 @@
-"""author: Marvin Beese"""
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 import tkinter as tk
 from tkinter.scrolledtext import *
@@ -12,6 +13,12 @@ from Basic_Gui import ConfigRanGenerationFrame as ConfigGen
 from Statistics import TextinputStatistics as Textstats
 from Statistics import FileAnalysis as FileAna
 from Generation import RandomGeneration
+
+"""GUI built with Tkinter and Themed-Tkinter.
+    This Window includes a Texteditor, 
+    a Frame with Metainformation regarding filename, filesize and author 
+    and a Frame with Textinformation regarding letter-,word-,sentence- and linecount    
+"""
 
 class WindowTkinter:
     def __init__(self):
@@ -31,6 +38,7 @@ class WindowTkinter:
         global fontSize, technicalFont, text
         self.fontSize=12
         self.technicalFont=0
+        # window Launch
         self.launchWindow()
 
 
@@ -55,6 +63,7 @@ class WindowTkinter:
         self.activeWindow.mainloop()
         print("Window closed")
 
+    """Menubar for File, Edit, Analysis and Text-Generation -Actions"""
     def buildMenuBar(self):
         # get Menubar for basic actions
         menubar = tk.Menu(self.activeWindow)
@@ -121,7 +130,6 @@ class WindowTkinter:
                                       command=lambda: self.calculateFileStats(self.metaText, self.textField),
                                       style='my.TButton')
         self.metaRefresh.pack(side=LEFT)
-        # self.activeWindow.bind_all("<Control-r>", lambda x: self.calculateFileStats(self.metaText, self.textField))
         self.metaText = Text(self.metaFrame, width=100, height=1)
         self.metaValue = "please refresh to load"
         self.metaText.config(state=tk.NORMAL)
@@ -130,6 +138,7 @@ class WindowTkinter:
         self.metaText.config(state=tk.DISABLED)
         self.metaText.pack()
 
+    """Frame for Text-Input and Displaying and Manipulation of existing text-Files"""
     def buildEditorFrame(self):
         # frame for text
         self.textFrame = ttk.LabelFrame(self.activeWindow, text="Text-Input", relief='raised', width=800, height=400)
@@ -139,6 +148,7 @@ class WindowTkinter:
         self.textField = ScrolledText(self.textFrame, font=('helvetica', 12), undo=TRUE, width=100)
         self.textField.pack()
 
+    """Display Statistics regarding the Text-Input: lettercount, wordcount, sentencecount, linecount"""
     def buildTextStatistics(self):
         # frame for statistics
         self.statsFrame = ttk.LabelFrame(self.activeWindow, text="Statistics", width=800, height=100)
@@ -164,6 +174,7 @@ class WindowTkinter:
     def getActiveText(self):
         return text
 
+    """for Text Statistics"""
     def calculateStats(self, textField):
         text = textField.get(1.0, tk.END)
         # count letters
@@ -182,6 +193,7 @@ class WindowTkinter:
         self.statsText.config(state=tk.DISABLED)
         self.statsText.pack(side=RIGHT)
 
+    """for Meta-Information"""
     def calculateFileStats(self, metaText, textField):
         # save File
         self.fileOP.saveFile(textField)
@@ -200,6 +212,7 @@ class WindowTkinter:
         self.metaText.config(state=tk.DISABLED)
         self.metaText.pack()
 
+    """exit Activity: prompt for a text-save based on whether fileintegrity is invoked"""
     def exitActivity(self, activeWindow, textField):
         # check file-integrity
         filePath = os.path.join(self.instance.getGlobalPath(), self.instance.getGlobalFilename())
@@ -224,7 +237,6 @@ class WindowTkinter:
         self.activeWindow.destroy()
         print("activeWindow closed!")
 
-
     def increaseTextSize(self):
         self.fontSize+=1
         self.textField.configure(font=('helvetica', self.fontSize))
@@ -235,6 +247,7 @@ class WindowTkinter:
         self.textField.configure(font=('helvetica', self.fontSize))
         self.textField.pack()
 
+    """toggle font between serif-font and sans-serif-font"""
     def changeFont(self):
         if(self.technicalFont==0):
             self.technicalFont=1
@@ -246,6 +259,7 @@ class WindowTkinter:
             self.textField.configure(font=('helvetica', self.fontSize))
         self.textField.pack()
 
+    """mathematical Analysis for current File"""
     def analysisTextBox(self):
         self.fileOP.saveFile(self.textField)
         currPath=os.path.join(self.instance.getGlobalPath(), self.instance.getGlobalFilename())
@@ -253,6 +267,7 @@ class WindowTkinter:
         fileAna=AnaFrame.AnalysisFrame(currPath)
         fileAna.launchAnalysis()
 
+    """mathematical Analysis for selected File"""
     def analysisSeparateFile(self):
         f = askopenfile(mode='r', title="Select File for File-Analysis", filetypes=[("Text Files", '*.txt')])
         print("open ", f.name, "for File Analysis")
@@ -274,7 +289,7 @@ class WindowTkinter:
         self.calculateFileStats(self.metaText, self.textField)
         self.calculateStats(self.textField)
 
-    # Generation of Random Text for the current or a new File
+    """" Generation of Random Text for the current or a new File"""
     def randomGeneration(self, newFile=False):
         if(newFile==False):
             file= "for Current File"

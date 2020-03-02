@@ -1,12 +1,16 @@
-"""author: Marvin Beese"""
+#!/usr/bin/env python
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 import tkinter as tk
 import os
 from tkinter import ttk
 from ttkthemes import ThemedTk
-from Generation import RandomGeneration
-from Basic_Gui import WindowInstance, WindowTkinter
+from Basic_Gui import WindowInstance
 
+""" Frame for the Configuration of the Generation of a random text. 
+    The text can be inserted to the end of the current document or into a new document.
+"""
 class ConfigRanGenerationFrame:
     def __init__(self):
         pass
@@ -42,6 +46,7 @@ class ConfigRanGenerationFrame:
         titleLabel.config(font=('Verdana', 20))
         titleLabel.pack(side=tk.TOP, pady=50)
 
+    """sets the probability of letter occurrences and calculates the probability of splitting occurrences"""
     def buildProbabilityArea(self):
         probabilityFrame = tk.Frame(self.activeWindow, height=100)
         probabilityFrame.pack(fill=tk.BOTH, pady=10)
@@ -68,12 +73,14 @@ class ConfigRanGenerationFrame:
         self.splittingProbLabel.config(font=('Verdana', 8))
         self.splittingProbLabel.pack(side=tk.LEFT, padx=10)
 
+    """splitting probability added based on letter probability"""
     def letterProbUpdated(self, letterProb):
         self.letterProba = letterProb
         self.splittingProba = round(1-self.letterProba,4)
         self.splittingProbLabel.config(text=self.splittingProba)
         self.splittingProbLabel.pack(side=tk.LEFT, padx=10)
 
+    """sets the nummber of symbols before a linebreak periodically"""
     def buildLineBreakArea(self):
         linebreakFrame = tk.Frame(self.activeWindow, height=100)
         linebreakFrame.pack(fill=tk.BOTH, pady=10)
@@ -90,6 +97,7 @@ class ConfigRanGenerationFrame:
     def linebreakUpdate(self, linebreakAfter):
         self.lineBreak = linebreakAfter
 
+    """sets the number of characters in the output text"""
     def buildStepsArea(self):
         stepsFrame = tk.Frame(self.activeWindow, height=100)
         stepsFrame.pack(fill=tk.BOTH, pady=10)
@@ -113,11 +121,13 @@ class ConfigRanGenerationFrame:
         self.writeToConfigFile()
         return self.letterProba, self.lineBreak, self.stepSize
 
+    """exit activity: stops the mainloop and closes the window"""
     def exitActivity(self):
-        self.activeWindow.quit()
-        self.activeWindow.destroy()
+        self.activeWindow.quit() #stopping the mainloop
+        self.activeWindow.destroy() #closing the window
         print("Configuration for Random Text-Generation closed!")
 
+    """configuration saved in a config file for further calculations"""
     def writeToConfigFile(self):
         instance = WindowInstance.WindowInstance()
         currPath=instance.getGlobalPath()

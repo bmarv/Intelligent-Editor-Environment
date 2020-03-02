@@ -1,5 +1,12 @@
-"""author: Marvin Beese"""
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
+"""Mathematical Analysis of the given file. Includes the linear Regression Analysis for the Slope of the Distribution,
+    the calculation of the zipfian exponent, the zipfian probability mass function, the estimated occurrences
+    and the deviation of the estimated to the real occurrences.
+    All relevant methods have been tested using PyTest
+    Every methods is calculated from scratch without the use of any additional libraries or modules
+"""
 class MathematicalAnalysis:
     def __init__(self):
         pass
@@ -72,8 +79,8 @@ class MathematicalAnalysis:
         print("\t1+(1/{0}) = {1}".format(abs(m),exp))
         return exp
 
-    "calculates the normalized frequency of elements of rank k"
-    # pmf(k;s,N) = \frac{1}{k^s * H_{N,s}}    //Probability Mass Function of Zipf-Function
+    "calculates the normalized frequency of elements of rank k / Probability Mass Function of Zipf-Function"
+    # pmf(k;s,N) = \frac{1}{k^s * H_{N,s}}
     # Rank k >=1, Exponent of Zipf-Distribution (shape parameter) s>1,
     def pmfZipf(self, k, N, xArr, yArr):
         if(k>N):
@@ -102,7 +109,7 @@ class MathematicalAnalysis:
         print("estOcc for rank {0}: {1}".format(rank, estOcc))
         return rank, estOcc
 
-    "says whether the deviation is 'zipfy' or not"
+    "says whether the deviation is 'zipfy' or not / deviation of real to estimated occurrences"
     # deviation(rank, real, est, wordLimit) = |real-est|/wordLimit < 0,10    //<10% is a random argument for ziphy
     def estToRealOccurrences(self, rank, realOcc, estOcc, wordLimit):
         deviation = abs(realOcc-estOcc) /wordLimit

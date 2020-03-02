@@ -1,25 +1,28 @@
-"""author: Marvin Beese"""
+__author__="Marvin Beese"
+__email__="marvin.beese@uni-potsdam.de"
 
 import getpass
 import re
 
+"""Analysis of the current File regarding the author of the text, the number of words 
+    and the mapping of words to their occurrences"""
 class FileAnalysis:
     def __init__(self):
         global author, wordList
 
 
-    # determines user of Windows/Unix System
+    """determines user of Windows/Unix System"""
     def getAuthor(self):
         self.author = getpass.getuser()
         return self.author
 
-    # get words from input string and returns List of words
+    """get words from input string and returns List of words"""
     def splitstring(self, textInput):
         self.wordList = re.split(r'[\.\,\;\s\:\"\!\?]\s*', str(textInput))
         return self.wordList
 
-    # input file to count including words,
-    # returns number or Words, Dictionary(key: word, value: int occurrences)
+    """input file to count including words,
+        returns number or Words, Dictionary(key: string word, value: int occurrences)"""
     def textStats(self, file, ReturnDict=False):
         # read file and save input in List
         print(file)
@@ -58,5 +61,6 @@ class FileAnalysis:
         wordOccurrences = len(fullwordList)
         return wordOccurrences, wordDict
 
+    """sorts a list starting with the highest number of occurrences using lambda expression"""
     def sortTextStats(self, List):
         return sorted(List.items(), key=lambda x: x[1], reverse=True)
