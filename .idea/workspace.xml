@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e0710cbd-5cf9-4c5d-be72-caa7788b187c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Statistics/FileAnalysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Statistics/FileAnalysis.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +40,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../YouTube-Statistician" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -281,11 +282,11 @@
     <state width="1515" height="277" key="GridCell.Tab.1.right/0.0.1536.864@0.0.1536.864" timestamp="1580469290162" />
     <state width="1654" height="173" key="GridCell.Tab.1.right/0.0.1676.943@0.0.1676.943" timestamp="1582998916086" />
     <state width="1899" height="292" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1581438908310" />
-    <state x="71" y="0" width="914" height="864" key="SettingsEditor" timestamp="1583005950774">
+    <state x="71" y="0" width="914" height="864" key="SettingsEditor" timestamp="1583412626644">
       <screen x="0" y="0" width="1676" height="943" />
     </state>
     <state x="65" y="0" width="914" height="864" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1582023290921" />
-    <state x="71" y="0" key="SettingsEditor/0.0.1676.943@0.0.1676.943" timestamp="1583005950774" />
+    <state x="71" y="0" key="SettingsEditor/0.0.1676.943@0.0.1676.943" timestamp="1583412626644" />
     <state x="98" y="166" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1581961692760" />
     <state x="681" y="280" width="570" height="524" key="StructurePopup" timestamp="1581370036190">
       <screen x="0" y="0" width="1920" height="1080" />

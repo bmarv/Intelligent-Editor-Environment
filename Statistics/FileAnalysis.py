@@ -16,7 +16,7 @@ class FileAnalysis:
         self.author = getpass.getuser()
         return self.author
 
-    """get words from input string and returns List of words"""
+    """gets words from input string and returns List of words"""
     def splitstring(self, textInput):
         self.wordList = re.split(r'[\.\,\;\s\:\"\!\?]\s*', str(textInput))
         return self.wordList
