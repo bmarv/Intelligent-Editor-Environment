@@ -4,6 +4,7 @@ __email__="marvin.beese@uni-potsdam.de"
 
 from tkinter.filedialog import *
 from tkinter import messagebox
+from os.path import expanduser
 from Basic_Gui import WindowInstance as WinInstance
 
 """Fileoperations are invoked in several cases:
@@ -28,7 +29,7 @@ class Fileoperations:
         # newInstance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
         extText.delete(0.0, END)
         instance.setGlobalFilename(self.filename)
-        instance.setGlobalPath(os.path.join(os.environ["HOMEPATH"], "Desktop"))
+        instance.setGlobalPath(os.path.join(expanduser("~"), "Desktop"))
         print("new File ", self.filename," in use")
 
     """save changes in the file, checks also for fileintegrity"""

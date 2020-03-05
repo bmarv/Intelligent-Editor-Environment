@@ -2,7 +2,7 @@ __author__="Marvin Beese"
 __email__="marvin.beese@uni-potsdam.de"
 
 import Basic_Gui.WindowTkinter as Window
-from os import path, environ
+from os import path
 from os.path import expanduser
 
 """Class for invoking new WindowTkinter-Instances of the Program.
