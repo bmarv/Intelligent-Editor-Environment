@@ -3,6 +3,7 @@ __email__="marvin.beese@uni-potsdam.de"
 
 import Basic_Gui.WindowTkinter as Window
 from os import path, environ
+from os.path import expanduser
 
 """Class for invoking new WindowTkinter-Instances of the Program.
     Every Instance includes the same Meta-Data
@@ -14,7 +15,8 @@ class WindowInstance:
         global globalFilename
         globalFilename = "Untitled.txt"
         global globalPath
-        globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
+        # globalPath = path.normpath(path.join(environ["HOMEPATH"], "Desktop"))
+        globalPath = path.normpath(path.join(expanduser("~"),"Desktop"))
         global instance
 
     def newInstance(self):
